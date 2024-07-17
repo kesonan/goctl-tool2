@@ -7,9 +7,9 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/zeromicro/go-zero/tools/goctl/util"
 	"github.com/zeromicro/goctl-tool/core/api/types"
 	"github.com/zeromicro/goctl-tool/core/jsonx"
+	"github.com/zeromicro/goctl-tool/core/stringx"
 )
 
 func RequestBodyParse(req *types.ParseJsonRequest) (resp *types.ParseJsonResponse, err error) {
@@ -24,7 +24,7 @@ func RequestBodyParse(req *types.ParseJsonRequest) (resp *types.ParseJsonRespons
 }
 
 func parseJSON(s string) ([]*types.FormItem, error) {
-	if util.IsEmptyStringOrWhiteSpace(s) {
+	if stringx.IsWhiteSpace(s) {
 		return []*types.FormItem{}, nil
 	}
 

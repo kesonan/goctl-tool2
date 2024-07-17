@@ -13,12 +13,10 @@ import (
 
 	"github.com/iancoleman/strcase"
 	"github.com/zeromicro/go-zero/core/lang"
-	sortedmap "github.com/zeromicro/go-zero/tools/goctl/pkg/collection"
-	"github.com/zeromicro/go-zero/tools/goctl/pkg/parser/api/format"
-	"github.com/zeromicro/go-zero/tools/goctl/util"
-	"github.com/zeromicro/go-zero/tools/goctl/util/stringx"
 	"github.com/zeromicro/goctl-tool/core/api/types"
+	"github.com/zeromicro/goctl-tool/core/parser/api/format"
 	"github.com/zeromicro/goctl-tool/core/sortmap"
+	"github.com/zeromicro/goctl-tool/core/stringx"
 	"github.com/zeromicro/goctl-tool/core/typex"
 	"github.com/zeromicro/goctl-tool/core/writer"
 )
@@ -78,7 +76,7 @@ func Generate(req *types.APIGenerateRequest) (resp *types.APIGenerateResponse, e
 			if len(route.RequestBody) > 0 {
 				request = generateTypeName(route, true)
 			}
-			if !util.IsEmptyStringOrWhiteSpace(route.ResponseBody) {
+			if !stringx.IsWhiteSpace(route.ResponseBody) {
 				response = generateTypeName(route, false)
 			}
 			routesData = append(routesData, KV{
@@ -185,8 +183,7 @@ func generateType(route *types.APIRoute) ([]string, error) {
 func generateRequestType(typeName string, postJSON bool, form []*types.FormItem) (string, error) {
 	t, err := template.New("field").Funcs(map[string]any{
 		"camel": func(s string) string {
-			x := stringx.From(s)
-			return strings.Title(x.ToCamel())
+			return strcase.ToCamel(s)
 		},
 	}).Parse(filedTemplate)
 	if err != nil {
@@ -236,7 +233,7 @@ func formatRange(lowerBound, upperBound int64) string {
 }
 
 func generateResponseType(typeName, s string) (string, error) {
-	if util.IsEmptyStringOrWhiteSpace(s) {
+	if stringx.IsWhiteSpace(s) {
 		return "", nil
 	}
 
@@ -428,12 +425,11 @@ func generateHandlerName(route *types.APIRoute) string {
 
 	r := strings.NewReplacer("/", "_", ":", "by_")
 	formatedPath := r.Replace(route.Path)
-	s := stringx.From(route.Method + "_" + formatedPath)
-	return strings.Title(s.ToCamel())
+	return strcase.ToCamel(route.Method + "_" + formatedPath)
 }
 
 func mergeGroup(req *types.APIGenerateRequest) *types.APIGenerateRequest {
-	routeGroup := sortedmap.New()
+	routeGroup := sortmap.New[RouteGroup, *types.APIRouteGroup]()
 	for _, group := range req.List {
 		middlewares := strings.Split(group.Middleware, ",")
 		sort.Strings(middlewares)
@@ -446,13 +442,12 @@ func mergeGroup(req *types.APIGenerateRequest) *types.APIGenerateRequest {
 			Middleware: middleware,
 			MaxBytes:   group.MaxBytes,
 		}
-		val, ok := routeGroup.Get(routeGroupStruct)
+		existGroup, ok := routeGroup.Get(routeGroupStruct)
 		if ok {
-			existGroup := val.(*types.APIRouteGroup)
 			existGroup.Routes = appendAndMergeRoute(existGroup.Routes, group.Routes)
-			routeGroup.SetKV(routeGroupStruct, existGroup)
+			routeGroup.Set(routeGroupStruct, existGroup)
 		} else {
-			routeGroup.SetKV(routeGroupStruct, &types.APIRouteGroup{
+			routeGroup.Set(routeGroupStruct, &types.APIRouteGroup{
 				Jwt:        group.Jwt,
 				Prefix:     group.Prefix,
 				Group:      group.Group,
@@ -467,31 +462,31 @@ func mergeGroup(req *types.APIGenerateRequest) *types.APIGenerateRequest {
 	var resp = types.APIGenerateRequest{
 		Name: req.Name,
 	}
-	routeGroup.Range(func(key, value any) {
-		resp.List = append(resp.List, value.(*types.APIRouteGroup))
+	routeGroup.MustRange(func(idx int, key RouteGroup, value *types.APIRouteGroup) {
+		resp.List = append(resp.List, value)
 	})
 
 	return &resp
 }
 
 func appendAndMergeRoute(header, tailer []*types.APIRoute) []*types.APIRoute {
-	routeMap := sortedmap.New()
+	routeMap := sortmap.New[APIRoute, *types.APIRoute]()
 	for _, route := range header {
 		key := convertRoute(route)
-		routeMap.SetKV(key, route)
+		routeMap.Set(key, route)
 	}
 
 	for _, route := range tailer {
 		key := convertRoute(route)
 		ok := routeMap.HasKey(key)
 		if !ok {
-			routeMap.SetKV(route, route)
+			routeMap.Set(key, route)
 		}
 	}
 
 	var list []*types.APIRoute
-	routeMap.Range(func(key, value any) {
-		list = append(list, value.(*types.APIRoute))
+	routeMap.MustRange(func(idx int, key APIRoute, value *types.APIRoute) {
+		list = append(list, value)
 	})
 
 	return list
@@ -511,7 +506,7 @@ func convertRoute(route *types.APIRoute) APIRoute {
 }
 
 func validateAPIGenerateRequest(req *types.APIGenerateRequest) error {
-	if util.IsEmptyStringOrWhiteSpace(req.Name) {
+	if stringx.IsWhiteSpace(req.Name) {
 		return errMissingServiceName
 	}
 	if len(req.List) == 0 {

@@ -6,7 +6,6 @@ import "./FormPanel.css";
 import RouteGroupPanel from "./RouteGroupPanel";
 import { ConverterIcon } from "../../../util/icon";
 import { Http } from "../../../util/http";
-import { FormInstance } from "rc-field-form/es/interface";
 import { RoutePanelData } from "./_defaultProps";
 
 const { Title } = Typography;
@@ -19,8 +18,7 @@ const FormPanel: React.FC<FormPanelProps> = (props) => {
   const [api, contextHolder] = message.useMessage();
   const { t } = useTranslation();
   const [form] = Form.useForm();
-  const onBuild = () => {
-    const obj = form.getFieldsValue();
+  const onFinish = (obj: any) => {
     Http.Build(
       obj,
       (data) => {
@@ -41,7 +39,18 @@ const FormPanel: React.FC<FormPanelProps> = (props) => {
     );
   };
   return (
-    <Flex vertical className={"form-panel"} flex={1}>
+    <Form
+      name="basic"
+      autoComplete="off"
+      className={"form-panel"}
+      layout={"vertical"}
+      form={form}
+      onFinish={onFinish}
+      initialValues={{
+        serviceName: "demo",
+        routeGroups: [{}],
+      }}
+    >
       {contextHolder}
       <Flex
         justify={"space-between"}
@@ -52,26 +61,18 @@ const FormPanel: React.FC<FormPanelProps> = (props) => {
           {t("builderPanelTitle")}
         </Title>
 
-        <Button size={"middle"} onClick={onBuild} type={"primary"}>
-          <ConverterIcon
-            type={"icon-terminal"}
-            className="welcome-start-icon"
-          />
-          {t("btnBuild")}
-        </Button>
+        <Form.Item>
+          <Button size={"middle"} type={"primary"} htmlType={"submit"}>
+            <ConverterIcon
+              type={"icon-terminal"}
+              className="welcome-start-icon"
+            />
+            {t("btnBuild")}
+          </Button>
+        </Form.Item>
       </Flex>
       <div className={"form-container-divider"} />
-      <Form
-        name="basic"
-        autoComplete="off"
-        className={"form-panel-form"}
-        layout={"vertical"}
-        form={form}
-        initialValues={{
-          serviceName: "demo",
-          routeGroups: [{}],
-        }}
-      >
+      <Flex vertical className={"form-panel-form-child"}>
         <Form.Item
           label={t("formServiceTitle")}
           name="serviceName"
@@ -137,8 +138,8 @@ const FormPanel: React.FC<FormPanelProps> = (props) => {
             </div>
           )}
         </Form.List>
-      </Form>
-    </Flex>
+      </Flex>
+    </Form>
   );
 };
 

@@ -437,10 +437,14 @@ func (p *Parser) parsePathExpr() *ast.PathExpr {
 		textList = append(textList, v.Text)
 	}
 
+	position := token.IllegalPosition
+	if len(values) > 0 {
+		position = values[0].Position
+	}
 	node := ast.NewTokenNode(token.Token{
 		Type:     token.PATH,
 		Text:     strings.Join(textList, ""),
-		Position: values[0].Position,
+		Position: position,
 	})
 	node.SetLeadingCommentGroup(p.curTokenNode().LeadingCommentGroup)
 	expr.Value = node

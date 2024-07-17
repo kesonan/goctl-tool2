@@ -7,7 +7,7 @@ import type { FormInstance } from "antd/es/form/hooks/useForm";
 import RequestLinePanel from "./RequestLinePanel";
 import RequestBodyPanel from "./RequestBodyPanel";
 import CodeMirrorPanel from "./CodeMirrorPanel";
-import { RoutePanelData, Method } from "./_defaultProps";
+import { RoutePanelData, Method, ContentType } from "./_defaultProps";
 
 interface RoutePanelProps {
   routeGroupField: FormListFieldData;
@@ -24,6 +24,7 @@ const RoutePanel: React.FC<
     {
       path: "",
       method: Method.POST.toLowerCase(),
+      contentType: ContentType.ApplicationJson,
       requestBodyFields: [],
       responseBody: "",
     },
@@ -48,6 +49,7 @@ const RoutePanel: React.FC<
             >
               {routeFields.map((routeField) => (
                 <Collapse
+                  key={routeField.key}
                   defaultActiveKey={[routeField.key]}
                   items={[
                     {
@@ -59,6 +61,7 @@ const RoutePanel: React.FC<
                           <RequestLinePanel routeField={routeField} />
                           {/*request body*/}
                           <Form.Item
+                            key={routeGroupField.key}
                             tooltip={t("formRequestBodyTooltip")}
                             label={t("formRequestBodyTitle")}
                           >

@@ -44,7 +44,7 @@ const RequestFieldPanel: React.FC<
   const [checkValue, setCheckValue] = useState("enum");
 
   return (
-    <div>
+    <div key={requestBodyField.key}>
       {contextHolder}
       {/*request body import modal*/}
       <Modal
@@ -67,7 +67,7 @@ const RequestFieldPanel: React.FC<
         width={500}
         okText={"OK"}
       >
-        <Flex vertical gap={6} wrap>
+        <Flex vertical gap={6} wrap key={requestBodyField.key}>
           <Form.Item
             label={t("formRequestBodyFieldNameTitle")}
             name={[requestBodyField.name, "name"]}

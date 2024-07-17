@@ -42,7 +42,6 @@ const RequestLinePanel: React.FC<
                   <Form.Item noStyle name={[routeField.name, "method"]}>
                     <Select
                       style={{ width: 100 }}
-                      defaultValue={Method.POST.toLowerCase()}
                       options={RoutePanelData.MethodOptions}
                       onSelect={(value) => {
                         if (value === Method.GET.toLowerCase()) {
@@ -82,7 +81,6 @@ const RequestLinePanel: React.FC<
             name={[routeField.name, "contentType"]}
           >
             <Select
-              defaultValue={ContentType.ApplicationJson}
               options={RoutePanelData.ContentTypeOptions}
               disabled={disableContentType}
             />

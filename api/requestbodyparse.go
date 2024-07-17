@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"github.com/zeromicro/goctl-tool-core/api"
-	"github.com/zeromicro/goctl-tool-core/api/types"
+	"github.com/zeromicro/goctl-tool/core/api"
+	"github.com/zeromicro/goctl-tool/core/api/types"
 	xhttp "github.com/zeromicro/x/http"
 )
 

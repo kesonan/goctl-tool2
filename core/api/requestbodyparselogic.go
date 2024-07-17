@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/zeromicro/go-zero/tools/goctl/util"
-	"github.com/zeromicro/goctl-tool-core/api/types"
-	"github.com/zeromicro/goctl-tool-core/jsonx"
+	"github.com/zeromicro/goctl-tool/core/api/types"
+	"github.com/zeromicro/goctl-tool/core/jsonx"
 )
 
 func RequestBodyParse(req *types.ParseJsonRequest) (resp *types.ParseJsonResponse, err error) {

@@ -17,10 +17,10 @@ import (
 	"github.com/zeromicro/go-zero/tools/goctl/pkg/parser/api/format"
 	"github.com/zeromicro/go-zero/tools/goctl/util"
 	"github.com/zeromicro/go-zero/tools/goctl/util/stringx"
-	"github.com/zeromicro/goctl-tool-core/api/types"
-	"github.com/zeromicro/goctl-tool-core/sortmap"
-	"github.com/zeromicro/goctl-tool-core/typex"
-	"github.com/zeromicro/goctl-tool-core/writer"
+	"github.com/zeromicro/goctl-tool/core/api/types"
+	"github.com/zeromicro/goctl-tool/core/sortmap"
+	"github.com/zeromicro/goctl-tool/core/typex"
+	"github.com/zeromicro/goctl-tool/core/writer"
 )
 
 var (

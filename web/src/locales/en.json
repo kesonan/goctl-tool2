@@ -1,10 +1,10 @@
 {
   "home": "Home",
-  "logoText": "goctl web page",
+  "logoText": "goctl web",
   "menuWelcome": "Welcome to goctl web",
   "api": "API",
-  "builder": "Builder",
-  "builderPanelTitle": "Builder",
+  "builder": "API Builder",
+  "builderPanelTitle": "API Builder",
   "apiPanelTitle": "goctl API",
   "notFoundDescription": "Sorry, the page you visited does not exist.",
   "backHome": "Builder",

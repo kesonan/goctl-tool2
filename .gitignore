@@ -1,0 +1,5 @@
+.idea
+.DS_Store
+.task
+bin
+goctl-tool.log

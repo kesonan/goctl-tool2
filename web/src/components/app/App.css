@@ -1,0 +1,101 @@
+.collapse-button-collapsed {
+    width: 22px;
+    height: 22px;
+    margin-left: -14px;
+    margin-top: 20px;
+    border-radius: 26px;
+    background: white;
+    box-shadow: 1px 1px 2px #f1f1f1;
+    border-style: solid;
+    border-width: 1px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #f1f1f1;
+    cursor: pointer;
+    color: #c1c1c1;
+    font-size: 10px;
+}
+
+.collapse-button-collapsed:hover {
+    width: 22px;
+    height: 22px;
+    margin-left: -14px;
+    margin-top: 20px;
+    border-radius: 26px;
+    background: white;
+    box-shadow: 1px 1px 5px #f1f1f1;
+    border-style: solid;
+    border-width: 1px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #f1f1f1;
+    cursor: pointer;
+    color: black;
+    font-size: 10px;
+}
+
+.collapse-button-uncollapsed {
+    width: 22px;
+    height: 22px;
+    margin-left: -14px;
+    margin-top: 20px;
+    border-radius: 26px;
+    background: white;
+    box-shadow: 1px 1px 2px #f1f1f1;
+    border-style: solid;
+    border-width: 1px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #f1f1f1;
+    cursor: pointer;
+    color: #c1c1c1;
+    font-size: 10px;
+    transform: rotate(180deg);
+}
+
+.collapse-button-uncollapsed:hover {
+    width: 22px;
+    height: 22px;
+    margin-left: -14px;
+    margin-top: 20px;
+    border-radius: 26px;
+    background: white;
+    box-shadow: 1px 1px 5px #f1f1f1;
+    border-style: solid;
+    border-width: 1px;
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-color: #f1f1f1;
+    cursor: pointer;
+    color: black;
+    font-size: 10px;
+    transform: rotate(180deg);
+}
+
+.locale-btn{
+    width: 26px;
+    height: 26px;
+    padding: 0;
+}
+
+.sider-footer-icon{
+    font-size: 20px;
+    margin-top: 2px;
+}
+
+.logo-text-gradient {
+    /*background-image: linear-gradient(to right, #2ea8ff, #165dff);*/
+    /*-webkit-background-clip: text;*/
+    color: #333333;
+    font-size: 20px;
+    padding: 0 10px;
+    font-family: 阿里妈妈方圆体 VF Regular;
+}

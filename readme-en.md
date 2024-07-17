@@ -10,7 +10,7 @@
 
 No need to worry about writing API files; goctl provides a web-based form to help you quickly construct API files.
 
-- Supports importing request and response bodies from JSON files
+- Supports importing request and response bodies from JSON text
 - Allows manual entry of request bodies
 - Supports options configuration
 

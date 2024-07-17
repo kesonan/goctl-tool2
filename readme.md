@@ -15,6 +15,10 @@
 
 ### 演示视频
 
+
 <div align="center">
-  <iframe src="https://player.vimeo.com/video/985779703" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+  <a href="https://vimeo.com/1901312669">
+    <img src="https://i.vimeocdn.com/video/1901312669-1ef5187813fa1e9b9b17fccffb48ebd5314108b1fca42a2f33a209d1a1cca259-d_1600x900" alt="Vimeo Video" width="640" height="360" />
+  </a>
 </div>
+

@@ -2,11 +2,9 @@ module github.com/zeromicro/goctl-tool
 
 go 1.20
 
-replace github.com/zeromicro/goctl-tool/core => ./core
-
 require (
 	github.com/zeromicro/go-zero v1.6.6
-	github.com/zeromicro/goctl-tool/core v0.0.0-00010101000000-000000000000
+	github.com/zeromicro/goctl-tool/core v0.0.0-20240717091215-29e0ddb0192a
 	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
 )
 

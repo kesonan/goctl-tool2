@@ -56,6 +56,8 @@ github.com/zeromicro/go-zero v1.6.6 h1:nZTVYObklHiBdYJ/nPoAZ8kGVAplWSDjT7DGE7ur0
 github.com/zeromicro/go-zero v1.6.6/go.mod h1:olKf1/hELbSmuIgLgJeoeNVp3tCbLqj6UmO7ATSta4A=
 github.com/zeromicro/go-zero/tools/goctl v1.6.6 h1:WcQaTcLZEuJFGN5epsik0WHU7DlaxdhibVbj1O0Wt54=
 github.com/zeromicro/go-zero/tools/goctl v1.6.6/go.mod h1:2ryQU02BzowtX7qVw4Q2d+g/l+2nHzyPN2aJY99jbxg=
+github.com/zeromicro/goctl-tool/core v0.0.0-20240717091215-29e0ddb0192a h1:jA94sWtG47WhDQD2TiixPcU72BdzuLhwGuT40AWT8wA=
+github.com/zeromicro/goctl-tool/core v0.0.0-20240717091215-29e0ddb0192a/go.mod h1:I0I+KyxCLgZHmFM7cQ/I3Pvi16z1dKIuGPZv5WgIG90=
 github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e h1:F5waakzloTfbJg2lcO1xvrzO6ssn7jQ38lXIDBz+nbQ=
 github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e/go.mod h1:5TP11tc1RHPCi5C/KDL0kIB0KgJAb9FB3ChpT/qM/jA=
 go.opentelemetry.io/otel v1.19.0 h1:MuS/TNf4/j4IXsZuJegVzI1cwut7Qc00344rgH7p8bs=

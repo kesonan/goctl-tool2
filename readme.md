@@ -1,5 +1,7 @@
 # goctl-tool
 
+中文｜[EN](readme-en.md)
+
 ## 概述
 `goctl-tool` 是为 `go-zero` 框架设计的一组工具链插件，旨在增强 Go 开发能力。
 

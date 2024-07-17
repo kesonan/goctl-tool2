@@ -1,5 +1,7 @@
 # goctl-tool
 
+[中文](readme.md)｜EN
+
 ## Overview
 
 `goctl-tool` is a set of toolchain plugins designed for the go-zero framework, aimed at enhancing Go development capabilities.

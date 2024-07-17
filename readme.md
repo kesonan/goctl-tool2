@@ -13,7 +13,9 @@
 - 请求体自主填写
 - 支持 options 配置
 
-### 示例
+### 演示视频
+
+<iframe src="https://player.vimeo.com/video/985779703" width="640" height="360" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
 
 
 

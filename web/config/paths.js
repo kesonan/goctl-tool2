@@ -21,7 +21,7 @@ const publicUrlOrPath = getPublicUrlOrPath(
   process.env.PUBLIC_URL,
 );
 
-const buildPath = process.env.BUILD_PATH || "../server/internal/handler/public";
+const buildPath = process.env.BUILD_PATH || "../public";
 
 const moduleFileExtensions = [
   "web.mjs",

@@ -1,0 +1,7 @@
+pre-commit:
+  commands:
+    goimportx:
+      glob: "*.go"
+      run: task b:goimportx -- {staged_files} && git add {staged_files}
+    tidy:
+      run: go mod tidy && git add go.mod go.sum

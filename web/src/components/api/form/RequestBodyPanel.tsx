@@ -165,7 +165,10 @@ const RequestBodyPanel: React.FC<
         <Button
           type="dashed"
           onClick={() => {
-            requestBodyOpt.add();
+            requestBodyOpt.add({
+              checkEnum: "enum",
+              optional: false,
+            });
           }}
           block
         >

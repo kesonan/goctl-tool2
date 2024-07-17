@@ -12,9 +12,9 @@ import (
 	"text/template"
 
 	"github.com/iancoleman/strcase"
-	"github.com/zeromicro/go-zero/core/lang"
 	"github.com/zeromicro/goctl-tool/core/api/types"
 	"github.com/zeromicro/goctl-tool/core/parser/api/format"
+	"github.com/zeromicro/goctl-tool/core/placeholder"
 	"github.com/zeromicro/goctl-tool/core/sortmap"
 	"github.com/zeromicro/goctl-tool/core/stringx"
 	"github.com/zeromicro/goctl-tool/core/typex"
@@ -525,8 +525,8 @@ func validateAPIGenerateRequest(req *types.APIGenerateRequest) error {
 	}
 
 	var (
-		handlerDuplicateCheck = make(map[string]lang.PlaceholderType)
-		routeDuplicateCheck   = make(map[string]lang.PlaceholderType)
+		handlerDuplicateCheck = make(map[string]placeholder.Type)
+		routeDuplicateCheck   = make(map[string]placeholder.Type)
 	)
 
 	for idx, group := range req.List {
@@ -547,8 +547,8 @@ func validateAPIGenerateRequest(req *types.APIGenerateRequest) error {
 				err = append(err, fmt.Sprintf("duplicate route: %q", routeUniqueValue))
 			}
 
-			handlerDuplicateCheck[handlerUniqueValue] = lang.Placeholder
-			routeDuplicateCheck[routeUniqueValue] = lang.Placeholder
+			handlerDuplicateCheck[handlerUniqueValue] = placeholder.PlaceHolder
+			routeDuplicateCheck[routeUniqueValue] = placeholder.PlaceHolder
 		}
 	}
 

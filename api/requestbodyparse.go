@@ -3,7 +3,6 @@ package api
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
 	"github.com/zeromicro/goctl-tool/core/api"
 	"github.com/zeromicro/goctl-tool/core/api/types"
 	xhttp "github.com/zeromicro/x/http"
@@ -11,7 +10,7 @@ import (
 
 func RequestBodyParse(w http.ResponseWriter, r *http.Request) {
 	var req types.ParseJsonRequest
-	if err := httpx.Parse(r, &req); err != nil {
+	if err := parse(r, &req); err != nil {
 		xhttp.JsonBaseResponseCtx(r.Context(), w, err)
 		return
 	}

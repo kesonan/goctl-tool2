@@ -33,7 +33,7 @@ func main() {
 
 	http.Handle("/", fileServerHandler(subFS, fileServer))
 	http.HandleFunc("/api/generate", api.Generate)
-	http.HandleFunc("/api/requestbodyparse", api.Generate)
+	http.HandleFunc("/api/requestbodyparse", api.RequestBodyParse)
 	if err := http.ListenAndServe(":2000", nil); err != nil {
 		log.Fatal(err)
 	}

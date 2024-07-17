@@ -3,7 +3,7 @@ package token
 import (
 	"fmt"
 
-	"github.com/zeromicro/goctl-tool/core/parser/api/placeholder"
+	"github.com/zeromicro/goctl-tool/core/placeholder"
 	"github.com/zeromicro/goctl-tool/core/stringx"
 )
 

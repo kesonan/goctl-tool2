@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const Paths = {
-  ParseBodyPath: "/api/request/body/parse",
+  ParseBodyPath: "/api/requestbodyparse",
   APIBuildPath: "/api/generate",
 };
 

@@ -524,6 +524,8 @@ func validateAPIGenerateRequest(req *types.APIGenerateRequest) error {
 		}
 	}
 
+	// generate handler
+
 	var (
 		handlerDuplicateCheck = make(map[string]placeholder.Type)
 		routeDuplicateCheck   = make(map[string]placeholder.Type)
@@ -533,21 +535,27 @@ func validateAPIGenerateRequest(req *types.APIGenerateRequest) error {
 		for _, route := range group.Routes {
 			var handlerUniqueValue, routeUniqueValue string
 			if len(group.Group) > 0 {
-				handlerUniqueValue = fmt.Sprintf("%s/%s", group.Group, route.Handler)
+				if stringx.IsNotWhiteSpace(route.Handler) {
+					handlerUniqueValue = fmt.Sprintf("%s/%s", group.Group, route.Handler)
+				}
 				routeUniqueValue = fmt.Sprintf("%s/%s:%s/%s", group.Group, route.Method, group.Prefix, route.Path)
 			} else {
-				handlerUniqueValue = fmt.Sprintf("group[%d]/%s", idx, route.Handler)
+				if stringx.IsNotWhiteSpace(route.Handler) {
+					handlerUniqueValue = fmt.Sprintf("group[%d]/%s", idx, route.Handler)
+				}
 				routeUniqueValue = fmt.Sprintf("group[%d]/%s:%s/%s", idx, route.Method, group.Prefix, route.Path)
 			}
 
-			if _, ok := handlerDuplicateCheck[handlerUniqueValue]; ok {
-				err = append(err, fmt.Sprintf("duplicate handler: %q", handlerUniqueValue))
+			if len(handlerUniqueValue) > 0 {
+				if _, ok := handlerDuplicateCheck[handlerUniqueValue]; ok {
+					err = append(err, fmt.Sprintf("duplicate handler: %q", handlerUniqueValue))
+				}
+				handlerDuplicateCheck[handlerUniqueValue] = placeholder.PlaceHolder
 			}
+
 			if _, ok := routeDuplicateCheck[routeUniqueValue]; ok {
 				err = append(err, fmt.Sprintf("duplicate route: %q", routeUniqueValue))
 			}
-
-			handlerDuplicateCheck[handlerUniqueValue] = placeholder.PlaceHolder
 			routeDuplicateCheck[routeUniqueValue] = placeholder.PlaceHolder
 		}
 	}

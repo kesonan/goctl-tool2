@@ -10,6 +10,10 @@ func IsWhiteSpace(s string) bool {
 	return len(fields) == 0
 }
 
+func IsNotWhiteSpace(s string) bool {
+	return !IsWhiteSpace(s)
+}
+
 func ContainsAny(s string, subStr ...string) bool {
 	for _, str := range subStr {
 		if strings.Contains(s, str) {

@@ -105,7 +105,16 @@ const RoutePanel: React.FC<
                   ]}
                 />
               ))}
-              <Button type="dashed" onClick={() => routeOpt.add()} block>
+              <Button
+                type="dashed"
+                onClick={() =>
+                  routeOpt.add({
+                    method: Method.POST.toLowerCase(),
+                    contentType: ContentType.ApplicationJson,
+                  })
+                }
+                block
+              >
                 + {t("formButtonRouteAdd")}
               </Button>
             </div>

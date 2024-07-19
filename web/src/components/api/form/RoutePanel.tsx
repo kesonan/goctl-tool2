@@ -7,7 +7,7 @@ import type { FormInstance } from "antd/es/form/hooks/useForm";
 import RequestLinePanel from "./RequestLinePanel";
 import RequestBodyPanel from "./RequestBodyPanel";
 import CodeMirrorPanel from "./CodeMirrorPanel";
-import { RoutePanelData, Method, ContentType } from "./_defaultProps";
+import { RoutePanelData, Method } from "./_defaultProps";
 
 interface RoutePanelProps {
   routeGroupField: FormListFieldData;
@@ -24,7 +24,6 @@ const RoutePanel: React.FC<
     {
       path: "",
       method: Method.POST.toLowerCase(),
-      contentType: ContentType.ApplicationJson,
       requestBodyFields: [],
       responseBody: "",
     },
@@ -110,7 +109,6 @@ const RoutePanel: React.FC<
                 onClick={() =>
                   routeOpt.add({
                     method: Method.POST.toLowerCase(),
-                    contentType: ContentType.ApplicationJson,
                   })
                 }
                 block

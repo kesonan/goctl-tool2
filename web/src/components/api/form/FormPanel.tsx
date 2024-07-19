@@ -1,6 +1,17 @@
 import React from "react";
-import { Button, Collapse, Flex, Form, Input, message, Typography } from "antd";
-import { CloseOutlined } from "@ant-design/icons";
+import {
+  Button,
+  Collapse,
+  Flex,
+  Form,
+  Input,
+  message,
+  Space,
+  Dropdown,
+  Typography,
+  MenuProps,
+} from "antd";
+import { CloseOutlined, DownOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import "./FormPanel.css";
 import RouteGroupPanel from "./RouteGroupPanel";
@@ -9,6 +20,7 @@ import { Http } from "../../../util/http";
 import { RoutePanelData } from "./_defaultProps";
 
 const { Title } = Typography;
+const APIFileExt = ".apix";
 
 interface FormPanelProps {
   onBuild?: (data: string) => void;
@@ -38,6 +50,50 @@ const FormPanel: React.FC<FormPanelProps> = (props) => {
       },
     );
   };
+  const onFileOpen = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = APIFileExt;
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const data = e.target?.result;
+          if (typeof data === "string") {
+            const obj = JSON.parse(data);
+            form.setFieldsValue(obj);
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+
+  const onFileSave = () => {
+    const data = form.getFieldsValue();
+    const blob = new Blob([JSON.stringify(data)], {
+      type: "application/json",
+    });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${data.serviceName}${APIFileExt}`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const items: MenuProps["items"] = [
+    {
+      key: "menuItemOpen",
+      label: <div onClick={onFileOpen}>{t("menuItemOpen")}</div>,
+    },
+    {
+      key: "menuItemSave",
+      label: <div onClick={onFileSave}>{t("menuItemSave")}</div>,
+    },
+  ];
   return (
     <Form
       name="basic"
@@ -57,9 +113,20 @@ const FormPanel: React.FC<FormPanelProps> = (props) => {
         align={"center"}
         className={"form-container-header"}
       >
-        <Title level={4} ellipsis style={{ margin: 0 }}>
-          {t("builderPanelTitle")}
-        </Title>
+        <Flex justify={"center"} align={"center"}>
+          <Title level={4} ellipsis style={{ margin: 0 }}>
+            {t("builderPanelTitle")}
+          </Title>
+
+          <Dropdown menu={{ items }}>
+            <a style={{ marginLeft: 20 }} onClick={(e) => e.preventDefault()}>
+              <Space>
+                {t("menuTitle")}
+                <DownOutlined />
+              </Space>
+            </a>
+          </Dropdown>
+        </Flex>
 
         <Form.Item>
           <Button size={"middle"} type={"primary"} htmlType={"submit"}>

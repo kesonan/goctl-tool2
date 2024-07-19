@@ -12,8 +12,8 @@ import (
 	"text/template"
 
 	"github.com/iancoleman/strcase"
+	"github.com/zeromicro/go-zero/tools/goctl/pkg/parser/api/format"
 	"github.com/zeromicro/goctl-tool/core/api/types"
-	"github.com/zeromicro/goctl-tool/core/parser/api/format"
 	"github.com/zeromicro/goctl-tool/core/placeholder"
 	"github.com/zeromicro/goctl-tool/core/sortmap"
 	"github.com/zeromicro/goctl-tool/core/stringx"
@@ -26,6 +26,8 @@ var (
 	apiTemplate string
 	//go:embed tpl/field.tpl
 	filedTemplate string
+	//go:embed tpl/tag.tpl
+	tagTemplate string
 
 	errMissingServiceName = errors.New("missing service name")
 	errMissingRouteGroups = errors.New("missing route groups")
@@ -157,10 +159,7 @@ func generateTypes(groups []*types.APIRouteGroup) ([]string, error) {
 func generateType(route *types.APIRoute) ([]string, error) {
 	var requestTypes []string
 	if len(route.RequestBody) > 0 {
-		isMethodPost := strings.EqualFold(route.Method, http.MethodPost)
-		postJson := isMethodPost && route.ContentType == applicationJSON
-		requestTypeName := generateTypeName(route, true)
-		requestType, err := generateRequestType(requestTypeName, postJson, route.RequestBody)
+		requestType, err := generateRequestType(route)
 		if err != nil {
 			return nil, err
 		}
@@ -169,8 +168,7 @@ func generateType(route *types.APIRoute) ([]string, error) {
 		}
 	}
 
-	responseTypeName := generateTypeName(route, false)
-	responseType, err := generateResponseType(responseTypeName, route.ResponseBody)
+	responseType, err := generateResponseType(route)
 	if err != nil {
 		return nil, err
 	}
@@ -180,7 +178,78 @@ func generateType(route *types.APIRoute) ([]string, error) {
 	return requestTypes, nil
 }
 
-func generateRequestType(typeName string, postJSON bool, form []*types.FormItem) (string, error) {
+func generateTag(route *types.APIRoute, form *types.FormItem) (string, error) {
+	tagTpl := route.TagTemplate
+	pathField := parsePathField(route.Path)
+	if stringx.IsWhiteSpace(tagTpl) {
+		tagTpl = tagTemplate
+	}
+	var tagType = "json"
+	if _, ok := pathField[form.Name]; ok {
+		tagType = "path"
+	} else if !strings.EqualFold(route.Method, http.MethodPost) {
+		tagType = "form"
+	}
+
+	return renderTag(&types.TagDataRequest{
+		Template:     tagTpl,
+		Type:         tagType,
+		Name:         form.Name,
+		Optional:     form.Optional,
+		DefaultValue: form.DefaultValue,
+		CheckEnum:    form.CheckEnum == checkTypeEnum,
+		EnumValue:    form.EnumValue,
+		LowerBound:   form.LowerBound,
+		UpperBound:   form.UpperBound,
+	})
+}
+
+func renderTag(data *types.TagDataRequest) (string, error) {
+	t, err := template.New("tag").Parse(data.Template)
+	if err != nil {
+		return "", err
+	}
+	var rangeValue, enumValue string
+	if data.CheckEnum {
+		enumValue = data.EnumValue
+	} else {
+		if data.LowerBound != data.UpperBound {
+			rangeExpr := formatRange(data.LowerBound, data.UpperBound)
+			rangeValue = fmt.Sprintf("range=%s", rangeExpr)
+		}
+	}
+
+	tagWriter := bytes.NewBuffer(nil)
+	err = t.Execute(tagWriter, map[string]any{
+		"type":         data.Type,
+		"name":         data.Name,
+		"optional":     data.Optional,
+		"defaultValue": data.DefaultValue,
+		"checkEnum":    data.CheckEnum,
+		"enumValue":    enumValue,
+		"rangeValue":   rangeValue,
+	})
+	if err != nil {
+		return "", err
+	}
+	return tagWriter.String(), nil
+}
+
+func parsePathField(url string) map[string]placeholder.Type {
+	ret := make(map[string]placeholder.Type)
+	paths := strings.FieldsFunc(url, func(r rune) bool {
+		return r == '/'
+	})
+	for _, p := range paths {
+		if strings.HasPrefix(p, ":") {
+			ret[strings.TrimPrefix(p, ":")] = placeholder.Type{}
+		}
+	}
+	return ret
+}
+
+func generateRequestType(route *types.APIRoute) (string, error) {
+	typeName := generateTypeName(route, true)
 	t, err := template.New("field").Funcs(map[string]any{
 		"camel": func(s string) string {
 			return strcase.ToCamel(s)
@@ -192,7 +261,12 @@ func generateRequestType(typeName string, postJSON bool, form []*types.FormItem)
 
 	fieldsWriter := writer.New("")
 	fieldWriter := bytes.NewBuffer(nil)
-	for _, item := range form {
+	for _, item := range route.RequestBody {
+		tag, err := generateTag(route, item)
+		if err != nil {
+			return "", err
+		}
+
 		fieldWriter.Reset()
 		var rangeValue, enumValue string
 		if item.CheckEnum == checkTypeRange &&
@@ -206,7 +280,7 @@ func generateRequestType(typeName string, postJSON bool, form []*types.FormItem)
 		err = t.Execute(fieldWriter, map[string]any{
 			"name":         item.Name,
 			"type":         item.Type,
-			"json":         postJSON,
+			"tag":          tag,
 			"optional":     item.Optional,
 			"defaultValue": item.DefaultValue,
 			"checkEnum":    item.CheckEnum == checkTypeEnum,
@@ -232,13 +306,15 @@ func formatRange(lowerBound, upperBound int64) string {
 	return fmt.Sprintf("[%d:%d]", lowerBound, upperBound)
 }
 
-func generateResponseType(typeName, s string) (string, error) {
-	if stringx.IsWhiteSpace(s) {
+func generateResponseType(route *types.APIRoute) (string, error) {
+	typeName := generateTypeName(route, false)
+	body := route.ResponseBody
+	if stringx.IsWhiteSpace(body) {
 		return "", nil
 	}
 
 	var v any
-	if err := json.Unmarshal([]byte(s), &v); err != nil {
+	if err := json.Unmarshal([]byte(body), &v); err != nil {
 		return "", err
 	}
 
@@ -497,11 +573,10 @@ func convertRoute(route *types.APIRoute) APIRoute {
 	for _, v := range route.RequestBody {
 		requestBody = append(requestBody, *v)
 	}
-	return APIRoute{ // ignore request & response
-		Handler:     route.Handler,
-		Method:      route.Method,
-		Path:        route.Path,
-		ContentType: route.ContentType,
+	return APIRoute{ // ignore request & response,tag
+		Handler: route.Handler,
+		Method:  route.Method,
+		Path:    route.Path,
 	}
 }
 

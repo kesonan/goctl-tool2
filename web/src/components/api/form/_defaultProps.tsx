@@ -10,11 +10,6 @@ export const enum Method {
   TRACE = "TRACE",
 }
 
-export const enum ContentType {
-  ApplicationJson = "application/json",
-  ApplicationForm = "application/x-www-form-urlencoded",
-}
-
 export const enum GolangType {
   Bool = "bool",
   Uint8 = "uint8",
@@ -52,7 +47,7 @@ export const RoutePanelData = {
   IDPattern: /^[a-zA-Z][\w]*$/gm,
   IDCommaPattern: /^([a-zA-Z](\w)*)+(,([a-zA-Z](\w)*)+)*$/gm,
   EnumCommaPattern: /([^|]*)(\|([^|]+))*[^|]+$/gm,
-  PrefixPathPattern: /^\/[\w\/-]*[\w]$/gm,
+  PrefixPathPattern: /(\/[a-zA-Z]+(\w*-?\w)*)+/gm,
   PathPattern: /^\/([\w\/-]|(:\w+))*[\w]$/gm,
   IsNumberType: (type: GolangType) => {
     return (
@@ -180,16 +175,6 @@ export const RoutePanelData = {
     {
       value: GolangType.Any,
       label: GolangType.Any,
-    },
-  ],
-  ContentTypeOptions: [
-    {
-      value: ContentType.ApplicationJson,
-      label: ContentType.ApplicationJson,
-    },
-    {
-      value: ContentType.ApplicationForm,
-      label: ContentType.ApplicationForm,
     },
   ],
   MethodOptions: [

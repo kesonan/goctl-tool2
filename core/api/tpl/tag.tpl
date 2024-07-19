@@ -1,0 +1,1 @@
+{{.type}}:"{{.name}}{{if .optional}},optional{{end}}{{if .defaultValue}},default={{.defaultValue}}{{end}}{{if .checkEnum}}{{if .enumValue}},options={{.enumValue}}{{end}}{{else}}{{if .rangeValue}},{{.rangeValue}}{{end}}{{end}}"

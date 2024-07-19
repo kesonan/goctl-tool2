@@ -1,26 +1,50 @@
 import React, { useState } from "react";
-import { Flex, Form, Input, Select } from "antd";
+import {
+  Button,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  message,
+  Modal,
+  Select,
+  Switch,
+  Table,
+  Tooltip,
+  Typography,
+} from "antd";
 import { FormListFieldData } from "antd/es/form/FormList";
 import { useTranslation } from "react-i18next";
-import { ContentType, Method, RoutePanelData } from "./_defaultProps";
+import { RoutePanelData } from "./_defaultProps";
+import TagModal from "./TagModal";
 
 interface RequestLinePanelProps {
   routeField: FormListFieldData;
 }
 
+const { TextArea } = Input;
+const { Text, Title } = Typography;
+
 const RequestLinePanel: React.FC<
   RequestLinePanelProps & React.RefAttributes<HTMLDivElement>
 > = (props) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const [api, contextHolder] = message.useMessage();
   const routeField = props.routeField;
-  const [disableContentType, setDisableContentType] = useState(false);
-
+  const [openModal, setOpenModal] = useState(false);
   return (
     <div>
+      {contextHolder}
+      <TagModal
+        open={openModal}
+        onClose={() => {
+          setOpenModal(false);
+        }}
+      />
       <Flex vertical wrap>
-        <Flex gap={16} wrap>
+        <Flex gap={8} wrap>
           <Form.Item
-            style={{ flex: 1 }}
+            style={{ flex: "0.75" }}
             label={t("formPathTitle")}
             name={[routeField.name, "path"]}
             rules={[
@@ -43,23 +67,14 @@ const RequestLinePanel: React.FC<
                     <Select
                       style={{ width: 100 }}
                       options={RoutePanelData.MethodOptions}
-                      onSelect={(value) => {
-                        if (value === Method.GET.toLowerCase()) {
-                          setDisableContentType(true);
-                        } else {
-                          setDisableContentType(false);
-                        }
-                      }}
                     />
                   </Form.Item>
                 </div>
               }
             />
           </Form.Item>
-        </Flex>
-        <Flex gap={8} wrap>
           <Form.Item
-            style={{ flex: "0.75" }}
+            style={{ flex: "0.25" }}
             label={t("formHandlerTitle")}
             name={[routeField.name, "handler"]}
             tooltip={t("formHandlerTooltip")}
@@ -75,17 +90,36 @@ const RequestLinePanel: React.FC<
               allowClear
             />
           </Form.Item>
-          <Form.Item
-            style={{ flex: "0.25" }}
-            label={t("formContentTypeTitle")}
-            name={[routeField.name, "contentType"]}
-          >
-            <Select
-              options={RoutePanelData.ContentTypeOptions}
-              disabled={disableContentType}
-            />
-          </Form.Item>
         </Flex>
+
+        <span
+          style={{
+            position: "absolute",
+            right: 0,
+            top: 150,
+            left: i18n.language === "en" ? 130 : 100,
+            zIndex: 1000,
+          }}
+        >
+          <Text
+            style={{ cursor: "pointer", fontSize: 14, color: "#1890ff" }}
+            onClick={() => setOpenModal(true)}
+          >
+            {t("formLabelDetail")}
+          </Text>
+        </span>
+        <Form.Item
+          style={{ flex: 1 }}
+          label={t("formRequestBodyTagTemplateTitle")}
+          name={[routeField.name, "tagTemplate"]}
+          tooltip={t("formRequestBodyTagTemplateTooltip")}
+        >
+          <TextArea
+            autoSize={{ minRows: 2, maxRows: 4 }}
+            allowClear
+            placeholder={t("formRequestBodyTagTemplatePlaceholder")}
+          />
+        </Form.Item>
       </Flex>
     </div>
   );

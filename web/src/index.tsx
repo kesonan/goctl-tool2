@@ -8,35 +8,34 @@ import Welcome from "./components/welcome/Welcome";
 import NotFound from "./components/notfound/NotFound";
 import API from "./components/api/API";
 
-const router = createBrowserRouter([
-  {
-    path: "*",
-    element: <NotFound />,
-  },
-  {
-    path: "/",
-    element: <Welcome />,
-  },
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      // {
-      //     path: "home",
-      //     element: <Home/>
-      // },
-      {
-        path: "api",
-        children: [
-          {
-            path: "builder",
-            element: <API />,
-          },
-        ],
-      },
-    ],
-  },
-]);
+const router = createBrowserRouter(
+  [
+    {
+      path: "*",
+      element: <NotFound />,
+    },
+    {
+      path: "/",
+      element: <Welcome />,
+    },
+    {
+      path: "/",
+      element: <App />,
+      children: [
+        {
+          path: "api",
+          children: [
+            {
+              path: "builder",
+              element: <API />,
+            },
+          ],
+        },
+      ],
+    },
+  ],
+  { basename: "/" },
+);
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement,

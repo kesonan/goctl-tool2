@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { LeftOutlined, GithubFilled } from "@ant-design/icons";
+import {
+  LeftOutlined,
+  GithubFilled,
+  ExclamationCircleOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Layout,
@@ -10,6 +14,7 @@ import {
   Typography,
   Breadcrumb,
   MenuProps,
+  Tooltip,
 } from "antd";
 import "../../Base.css";
 import "./App.css";
@@ -102,25 +107,52 @@ const App: React.FC = () => {
     if (localeZH) {
       return (
         <>
-          <Button className="locale-btn" onClick={onLocaleClick}>
-            中
-          </Button>
+          <Tooltip title={t("siderFooterLocale")}>
+            <Button className="locale-btn" onClick={onLocaleClick}>
+              中
+            </Button>
+          </Tooltip>
           <Link href="https://go-zero.dev" target="_blank">
-            <ConverterIcon
-              type={"icon-document"}
-              className="sider-footer-icon"
-            />
+            <Tooltip title={t("siderFooterDoc")}>
+              <ConverterIcon
+                type={"icon-document"}
+                className="sider-footer-icon"
+              />
+            </Tooltip>
+          </Link>
+          <Link
+            href="https://github.com/zeromicro/goctl-tool/issues/new"
+            target="_blank"
+          >
+            <Tooltip title={t("siderFooterFeedback")}>
+              <ExclamationCircleOutlined className="sider-footer-icon" />
+            </Tooltip>
           </Link>
         </>
       );
     }
     return (
       <>
-        <Button className="locale-btn" onClick={onLocaleClick}>
-          EN
-        </Button>
+        <Tooltip title={t("siderFooterLocale")}>
+          <Button className="locale-btn" onClick={onLocaleClick}>
+            EN
+          </Button>
+        </Tooltip>
         <Link href="https://go-zero.dev" target="_blank">
-          <ConverterIcon type={"icon-document"} className="sider-footer-icon" />
+          <Tooltip title={t("siderFooterDoc")}>
+            <ConverterIcon
+              type={"icon-document"}
+              className="sider-footer-icon"
+            />
+          </Tooltip>
+        </Link>
+        <Link
+          href="https://github.com/zeromicro/goctl-tool/issues/new"
+          target="_blank"
+        >
+          <Tooltip title={t("siderFooterFeedback")}>
+            <ExclamationCircleOutlined className="sider-footer-icon" />
+          </Tooltip>
         </Link>
       </>
     );

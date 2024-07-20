@@ -3,6 +3,7 @@ import axios from "axios";
 const Paths = {
   ParseBodyPath: "/api/requestbodyparse",
   APIBuildPath: "/api/generate",
+  RenderTagPath: "/api/rendertag",
 };
 
 export type ParseBodyResult = {
@@ -11,6 +12,10 @@ export type ParseBodyResult = {
 
 export type APIBuildResult = {
   api: string;
+};
+
+export type RenderTagResult = {
+  tag: string;
 };
 
 export type ParseBodyForm = {
@@ -75,6 +80,20 @@ export const Http = {
       param,
       (data) => {
         callback(data.api);
+      },
+      catchError,
+    );
+  },
+  RenderTag: (
+    param: any,
+    callback: (data: string) => void,
+    catchError: (err: string) => void,
+  ) => {
+    postJSON<RenderTagResult>(
+      Paths.RenderTagPath,
+      param,
+      (data) => {
+        callback(data.tag);
       },
       catchError,
     );

@@ -27,6 +27,7 @@ const RouteGroupOptionPanel: React.FC<
           style={{ flex: 1 }}
           label={t("formPrefixTitle")}
           name={[routeGroupField.name, "prefix"]}
+          tooltip={t("formPrefixTooltip")}
           rules={[
             {
               pattern: RoutePanelData.PrefixPathPattern,

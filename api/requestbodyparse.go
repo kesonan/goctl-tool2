@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"github.com/zeromicro/goctl-tool/core/api"
 	"github.com/zeromicro/goctl-tool/core/api/types"
 )
@@ -17,7 +18,7 @@ type CodeMsg struct {
 
 func RequestBodyParse(w http.ResponseWriter, r *http.Request) {
 	var req types.ParseJsonRequest
-	if err := parse(r, &req); err != nil {
+	if err := httpx.Parse(r, &req); err != nil {
 		writeJson(w, err)
 		return
 	}

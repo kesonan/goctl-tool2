@@ -11,10 +11,9 @@ type (
 	}
 
 	APIRoute struct {
-		Handler     string
-		Method      string
-		Path        string
-		ContentType string
+		Handler string
+		Method  string
+		Path    string
 	}
 
 	json2APITypeReq struct {

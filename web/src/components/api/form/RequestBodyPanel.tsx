@@ -137,7 +137,7 @@ const RequestBodyPanel: React.FC<
         <span
           style={{
             position: "absolute",
-            top: -25,
+            top: -35,
             right: 0,
             zIndex: 1000,
           }}
@@ -156,6 +156,7 @@ const RequestBodyPanel: React.FC<
         {requestBodyFields.map((requestBodyField) => (
           <RequestFieldPanel
             key={requestBodyField.key}
+            routeGroupField={routeGroupField}
             requestBodyField={requestBodyField}
             requestBodyOpt={requestBodyOpt}
             routeField={routeField}

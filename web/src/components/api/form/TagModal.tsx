@@ -31,10 +31,10 @@ const TagModal: React.FC<
 > = (props) => {
   const [form] = Form.useForm();
   const { t, i18n } = useTranslation();
-  const initTagText = `{{.type}}:"{{.name}}{{if .optional}},optional{{end}}{{if .defaultValue}},default={{.defaultValue}}{{end}}{{if .checkEnum}}{{if .enumValue}},options={{.enumValue}}{{end}}{{else}}{{if .rangeValue}},{{.rangeValue}}{{end}}{{end}}"`;
+  const initTagText = `{{.type}}:"{{.name}}{{if .optional}},optional{{end}}{{if .defaultValue}},default={{.defaultValue}}{{end}}{{if .isNumber}}{{if .rangeValue}},{{.rangeValue}}{{end}}{{else}}{{if .enumValue}},options={{.enumValue}}{{end}}{{end}}"`;
   const [tagText, setTagText] = useState(initTagText);
   const [tagValue, setTagValue] = useState("");
-  const [checkEnum, setCheckEnum] = useState(true);
+  const [isNumber, setIsNumber] = useState(false);
   const [api, contextHolder] = message.useMessage();
   const [tagModalOpen, setTagModalOpen] = useState(false);
   useEffect(() => {
@@ -101,10 +101,10 @@ const TagModal: React.FC<
       description: t("tagTableDescTagDefaultValue"),
     },
     {
-      key: "checkEnum",
-      name: "{{.checkEnum}}",
+      key: "isNumber",
+      name: "{{.isNumber}}",
       type: "bool",
-      description: t("tagTableDescTagCheckEnum"),
+      description: t("tagTableDescTagIsNumber"),
     },
     {
       key: "enumValue",
@@ -268,19 +268,16 @@ const TagModal: React.FC<
                 <Switch />
               </Form.Item>
 
-              <Form.Item
-                label={t("tagTableDescTagCheckEnum")}
-                name={"checkEnum"}
-              >
+              <Form.Item label={t("tagTableDescTagIsNumber")} name={"isNumber"}>
                 <Switch
                   onChange={(checked) => {
-                    setCheckEnum(checked);
+                    setIsNumber(checked);
                   }}
                 />
               </Form.Item>
 
               <Flex wrap style={{ flex: 0.75 }} gap={8}>
-                {checkEnum ? (
+                {!isNumber ? (
                   <Form.Item
                     style={{ flex: 1 }}
                     label={t("tagTableDescTagEnumValue")}

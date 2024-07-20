@@ -1,10 +1,7 @@
 package api
 
 const (
-	indent          = "  "
-	applicationJSON = "application/json"
-	checkTypeRange  = "range"
-	checkTypeEnum   = "enum"
+	indent = "  "
 )
 
 const (

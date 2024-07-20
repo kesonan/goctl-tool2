@@ -33,10 +33,9 @@ type FormItem struct {
 	Type         string `json:"type"`
 	Optional     bool   `json:"optional,optional,omitempty"`
 	DefaultValue string `json:"defaultValue,optional,omitempty"`
-	CheckEnum    string `json:"checkEnum,optional,omitempty,options=enum|range"`
-	EnumValue    string `json:"enumValue,optional,omitempty"`  // // effect if checkEunm is true
-	LowerBound   int64  `json:"lowerBound,optional,omitempty"` // effect if checkEunm is false
-	UpperBound   int64  `json:"upperBound,optional,omitempty"` // // effect if checkEunm is false
+	EnumValue    string `json:"enumValue,optional,omitempty"`
+	LowerBound   int64  `json:"lowerBound,optional,omitempty"`
+	UpperBound   int64  `json:"upperBound,optional,omitempty"`
 }
 
 type ParseJsonRequest struct {
@@ -53,7 +52,7 @@ type TagDataRequest struct {
 	Name         string `json:"name"`
 	Optional     bool   `json:"optional,omitempty,optional"`
 	DefaultValue string `json:"defaultValue,omitempty,optional"`
-	CheckEnum    bool   `json:"checkEnum,omitempty,optional"`
+	IsNumber     bool   `json:"isNumber,omitempty,optional"`
 	EnumValue    string `json:"enumValue,omitempty,optional"`
 	LowerBound   int64  `json:"lowerBound,omitempty,optional"`
 	UpperBound   int64  `json:"upperBound,omitempty,optional"`

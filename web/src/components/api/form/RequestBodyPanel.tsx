@@ -156,6 +156,7 @@ const RequestBodyPanel: React.FC<
         {requestBodyFields.map((requestBodyField) => (
           <RequestFieldPanel
             key={requestBodyField.key}
+            routeGroupField={routeGroupField}
             requestBodyField={requestBodyField}
             requestBodyOpt={requestBodyOpt}
             routeField={routeField}

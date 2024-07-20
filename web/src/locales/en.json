@@ -56,7 +56,7 @@
   "tagTableTagTypeLabel": "Tag Type",
   "tagTableDescTagOptional": "Field optional",
   "tagTableDescTagDefaultValue": "The default value",
-  "tagTableDescTagCheckEnum": "Is it an enumeration or not",
+  "tagTableDescTagIsNumber": "Number",
   "tagTableDescTagEnumValue": "Enumeration value",
   "tagTableDescTagRangeValue": "Number range",
   "tagModalTry": "Try",

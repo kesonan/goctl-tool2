@@ -197,11 +197,17 @@ func generateTag(route *types.APIRoute, form *types.FormItem) (string, error) {
 		Name:         form.Name,
 		Optional:     form.Optional,
 		DefaultValue: form.DefaultValue,
-		CheckEnum:    form.CheckEnum == checkTypeEnum,
+		IsNumber:     isNumber(form.Type),
 		EnumValue:    form.EnumValue,
 		LowerBound:   form.LowerBound,
 		UpperBound:   form.UpperBound,
 	})
+}
+
+func isNumber(tp string) bool {
+	return strings.HasPrefix(tp, "int") ||
+		strings.HasPrefix(tp, "uint") ||
+		strings.HasPrefix(tp, "float")
 }
 
 func renderTag(data *types.TagDataRequest) (string, error) {
@@ -210,7 +216,7 @@ func renderTag(data *types.TagDataRequest) (string, error) {
 		return "", err
 	}
 	var rangeValue, enumValue string
-	if data.CheckEnum {
+	if !data.IsNumber {
 		enumValue = data.EnumValue
 	} else {
 		if data.LowerBound != data.UpperBound {
@@ -225,7 +231,7 @@ func renderTag(data *types.TagDataRequest) (string, error) {
 		"name":         data.Name,
 		"optional":     data.Optional,
 		"defaultValue": data.DefaultValue,
-		"checkEnum":    data.CheckEnum,
+		"isNumber":     data.IsNumber,
 		"enumValue":    enumValue,
 		"rangeValue":   rangeValue,
 	})
@@ -269,12 +275,13 @@ func generateRequestType(route *types.APIRoute) (string, error) {
 
 		fieldWriter.Reset()
 		var rangeValue, enumValue string
-		if item.CheckEnum == checkTypeRange &&
-			item.LowerBound != item.UpperBound {
+		var isNumber = isNumber(item.Type)
+		if isNumber && item.LowerBound != item.UpperBound {
 			rangeExpr := formatRange(item.LowerBound, item.UpperBound)
 			rangeValue = fmt.Sprintf("range=%s", rangeExpr)
 		}
-		if item.CheckEnum == checkTypeEnum {
+
+		if !isNumber {
 			enumValue = item.EnumValue
 		}
 		err = t.Execute(fieldWriter, map[string]any{
@@ -283,7 +290,7 @@ func generateRequestType(route *types.APIRoute) (string, error) {
 			"tag":          tag,
 			"optional":     item.Optional,
 			"defaultValue": item.DefaultValue,
-			"checkEnum":    item.CheckEnum == checkTypeEnum,
+			"isNumber":     isNumber,
 			"enumValue":    enumValue,
 			"rangeValue":   rangeValue,
 		})

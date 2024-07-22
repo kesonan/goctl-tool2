@@ -6,7 +6,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./i18n";
 import Welcome from "./components/welcome/Welcome";
 import NotFound from "./components/notfound/NotFound";
-import API from "./components/api/API";
+import Builder from "./components/api/Builder";
+import Go from "./components/generator/go/Go";
 
 const router = createBrowserRouter(
   [
@@ -27,7 +28,16 @@ const router = createBrowserRouter(
           children: [
             {
               path: "builder",
-              element: <API />,
+              element: <Builder />,
+            },
+          ],
+        },
+        {
+          path: "generator",
+          children: [
+            {
+              path: "go",
+              element: <Go />,
             },
           ],
         },

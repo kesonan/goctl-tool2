@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Layout, Flex } from "antd";
 import "../../Base.css";
-import "./API.css";
+import "./Builder.css";
 import FormPanel from "./form/FormPanel";
 import CodePanel from "./form/CodePanel";
 
-const App: React.FC = () => {
+const Builder: React.FC = () => {
   const [code, setCode] = useState("");
   return (
     <Layout className="api">
@@ -30,4 +30,4 @@ const App: React.FC = () => {
   );
 };
 
-export default App;
+export default Builder;

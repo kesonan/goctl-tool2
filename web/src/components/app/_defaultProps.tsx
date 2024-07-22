@@ -10,10 +10,10 @@ const iconStyle: CSSProperties = {
 };
 
 const subMenuIconStyle: CSSProperties = {
-  color: "#575757",
   fontSize: 18,
   textAlign: "center",
   marginLeft: "-4px",
+  color: "#575757",
 };
 
 export const menuItems = (t: TFunction) => {
@@ -34,6 +34,18 @@ export const menuItems = (t: TFunction) => {
             <ConverterIcon style={subMenuIconStyle} type={"icon-builder"} />
           ),
           label: t("builder"),
+        },
+      ],
+    },
+    {
+      key: "generator",
+      icon: <ConverterIcon style={iconStyle} type={"icon-generator"} />,
+      label: t("generator"),
+      children: [
+        {
+          key: "go",
+          icon: <ConverterIcon style={subMenuIconStyle} type={"icon-golang"} />,
+          label: t("go"),
         },
       ],
     },

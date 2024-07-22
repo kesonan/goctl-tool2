@@ -105,7 +105,7 @@ const RequestLinePanel: React.FC<
             style={{ cursor: "pointer", fontSize: 14, color: "#1890ff" }}
             onClick={() => setOpenModal(true)}
           >
-            {t("formLabelDetail")}
+            {t("formTagLabelDetail")}
           </Text>
         </span>
         <Form.Item

@@ -43,9 +43,9 @@ export const menuItems = (t: TFunction) => {
       label: t("generator"),
       children: [
         {
-          key: "go",
-          icon: <ConverterIcon style={subMenuIconStyle} type={"icon-golang"} />,
-          label: t("go"),
+          key: "model",
+          icon: <ConverterIcon style={subMenuIconStyle} type={"icon-model"} />,
+          label: t("model"),
         },
       ],
     },

@@ -49,7 +49,7 @@
   "formRequestBodyFieldDefaultTitle": "默认值",
   "formRequestBodyTagTemplateTitle": "标签模板",
   "formRequestBodyTagTemplateModalTitle": "标签模板说明",
-  "formTagLabelDetail": "标签定制？",
+  "formTagLabelDetail": "定制标签",
   "formRequestBodyTagTemplatePlaceholder": "json:\"{{.name}}{{if .optional}},optional{{end}}{{if .defaultValue}},default={{.defaultValue}}{{end}}{{if .checkEnum}}{{if .enumValue}},options={{.enumValue}}{{end}}{{else}}{{if .rangeValue}},{{.rangeValue}}{{end}}{{end}}\"",
   "formRequestBodyTagTemplateTooltip": "标签模板，可以覆盖内置的标签模板规则，模板无需``包裹，填``内的文本模板即可，点击右侧图标查看详情",
   "tagModalContent": "标签模板可以方便生成个性化标签，目前模板支持以下变量：",
@@ -92,5 +92,6 @@
   "menuTitle": "文件",
   "menuItemOpen": "导入...",
   "menuItemSave": "下载",
-  "btnClose": "关闭"
+  "btnClose": "关闭",
+  "model": "数据库模型"
 }

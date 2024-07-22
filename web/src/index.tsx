@@ -7,7 +7,9 @@ import "./i18n";
 import Welcome from "./components/welcome/Welcome";
 import NotFound from "./components/notfound/NotFound";
 import Builder from "./components/api/Builder";
-import Go from "./components/generator/go/Go";
+import Model from "./components/generator/model/Model";
+import Mysql from "./components/generator/model/Mysql";
+import Postgresql from "./components/generator/model/Postgresql";
 
 const router = createBrowserRouter(
   [
@@ -36,8 +38,18 @@ const router = createBrowserRouter(
           path: "generator",
           children: [
             {
-              path: "go",
-              element: <Go />,
+              path: "model",
+              element: <Model />,
+              children: [
+                {
+                  path: "mysql",
+                  element: <Mysql />,
+                },
+                {
+                  path: "postgresql",
+                  element: <Postgresql />,
+                },
+              ],
             },
           ],
         },

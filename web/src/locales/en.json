@@ -92,5 +92,6 @@
   "menuTitle": "File",
   "menuItemOpen": "Open...",
   "menuItemSave": "Download...",
-  "btnClose": "Close"
+  "btnClose": "Close",
+  "model": "Model"
 }

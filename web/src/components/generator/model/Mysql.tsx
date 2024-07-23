@@ -14,6 +14,7 @@ import {
 import "./Mysql.css";
 import { useTranslation } from "react-i18next";
 import CodeMirror from "@uiw/react-codemirror";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 
 const { Title } = Typography;
 
@@ -21,6 +22,7 @@ const Mysql: React.FC = () => {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [code, setCode] = useState("");
+  const [passwordVisible, setPasswordVisible] = React.useState(false);
   const onChange: CheckboxProps["onChange"] = (e) => {
     console.log(`checked = ${e.target.checked}`);
   };
@@ -36,6 +38,7 @@ const Mysql: React.FC = () => {
                 label={t("mysqlHost")}
                 style={{ flex: 0.7 }}
                 name={"host"}
+                tooltip={t("mysqlHostTooltip")}
               >
                 <Input
                   placeholder={`${t("formInputPrefix")}${t("mysqlHost")}`}
@@ -63,8 +66,11 @@ const Mysql: React.FC = () => {
                 />
               </Form.Item>
               <Form.Item label={t("mysqlPassword")} name={"password"}>
-                <Input
+                <Input.Password
                   placeholder={`${t("formInputPrefix")}${t("mysqlPassword")}`}
+                  iconRender={(visible) =>
+                    visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
+                  }
                 />
               </Form.Item>
 
@@ -103,6 +109,7 @@ const Mysql: React.FC = () => {
                 label={t("mysqlStyle")}
                 style={{ flex: 1 }}
                 name={"style"}
+                tooltip={t("mysqlStyleTooltip")}
               >
                 <Input
                   placeholder={`${t("formInputPrefix")}${t("mysqlStyle")}`}
@@ -122,7 +129,12 @@ const Mysql: React.FC = () => {
               <Form.Item label={""} style={{ flex: 1 }} name={"cache"}>
                 <Checkbox>{t("mysqlCache")}</Checkbox>
               </Form.Item>
-              <Form.Item label={""} style={{ flex: 1 }} name={"strict"}>
+              <Form.Item
+                label={""}
+                style={{ flex: 1 }}
+                name={"strict"}
+                tooltip={t("mysqlStrictTooltip")}
+              >
                 <Checkbox>{t("mysqlStrict")}</Checkbox>
               </Form.Item>
             </Flex>

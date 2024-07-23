@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Flex, Layout, Typography } from "antd";
+import { Flex, Typography } from "antd";
 import "./Mysql.css";
 import { useTranslation } from "react-i18next";
 

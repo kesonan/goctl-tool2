@@ -93,5 +93,20 @@
   "menuItemOpen": "导入...",
   "menuItemSave": "下载",
   "btnClose": "关闭",
-  "model": "数据库模型"
+  "model": "数据库模型",
+  "mysqlHost": "主机",
+  "mysqlPort": "端口",
+  "mysqlUsername": "用户名",
+  "mysqlPassword": "密码",
+  "mysqlSchema": "数据库",
+  "mysqlTable": "数据表",
+  "mysqlConnection": "连接数据库",
+  "mysqlConnectionTitle": "数据库连接信息",
+  "mysqlGenerateTitle": "代码生成选项",
+  "mysqlGenerate": "生成代码",
+  "mysqlRemember": "记住账号",
+  "mysqlCache": "是否带缓存",
+  "mysqlStrict": "是否严格模式",
+  "mysqlStyle": "文件格式化符",
+  "mysqlIgnoreColumns": "忽略字段"
 }

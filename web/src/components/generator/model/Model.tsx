@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Layout, Menu, MenuProps } from "antd";
-import "../../../Base.css";
 import "./Model.css";
 import { useTranslation } from "react-i18next";
 import { ConverterIcon } from "../../../util/icon";
@@ -41,6 +40,7 @@ const Model: React.FC = () => {
         mode="horizontal"
         items={items}
         onSelect={onSelect}
+        className={"model-container"}
       />
       <Outlet />
     </Layout>

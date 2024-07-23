@@ -42,6 +42,10 @@ const router = createBrowserRouter(
               element: <Model />,
               children: [
                 {
+                  element: <Mysql />,
+                  index: true,
+                },
+                {
                   path: "mysql",
                   element: <Mysql />,
                 },

@@ -1,18 +1,5 @@
 import React, { useState } from "react";
-import {
-  Button,
-  Flex,
-  Form,
-  Input,
-  InputNumber,
-  message,
-  Modal,
-  Select,
-  Switch,
-  Table,
-  Tooltip,
-  Typography,
-} from "antd";
+import { Flex, Form, Input, Select, Typography } from "antd";
 import { FormListFieldData } from "antd/es/form/FormList";
 import { useTranslation } from "react-i18next";
 import { RoutePanelData } from "./_defaultProps";
@@ -23,18 +10,16 @@ interface RequestLinePanelProps {
 }
 
 const { TextArea } = Input;
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 const RequestLinePanel: React.FC<
   RequestLinePanelProps & React.RefAttributes<HTMLDivElement>
 > = (props) => {
   const { t, i18n } = useTranslation();
-  const [api, contextHolder] = message.useMessage();
   const routeField = props.routeField;
   const [openModal, setOpenModal] = useState(false);
   return (
     <div>
-      {contextHolder}
       <TagModal
         open={openModal}
         onClose={() => {
@@ -44,7 +29,7 @@ const RequestLinePanel: React.FC<
       <Flex vertical wrap>
         <Flex gap={8} wrap>
           <Form.Item
-            style={{ flex: "0.75" }}
+            style={{ flex: 1 }}
             label={t("formPathTitle")}
             name={[routeField.name, "path"]}
             rules={[
@@ -74,7 +59,7 @@ const RequestLinePanel: React.FC<
             />
           </Form.Item>
           <Form.Item
-            style={{ flex: "0.25" }}
+            style={{ flex: 1 }}
             label={t("formHandlerTitle")}
             name={[routeField.name, "handler"]}
             tooltip={t("formHandlerTooltip")}

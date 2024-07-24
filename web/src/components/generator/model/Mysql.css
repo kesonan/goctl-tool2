@@ -22,15 +22,15 @@
 }
 
 .mysql-form-container {
-    flex: 0.3;
+    flex: 1;
     height: 100%;
     overflow: scroll;
     background: white;
+    min-width: 500px;
 }
 
 .mysql-editor-container {
-    flex: 0.7;
-    min-width: 400px;
+    flex: 1;
     height: 100%;
 }
 

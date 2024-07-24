@@ -111,5 +111,11 @@
   "mysqlIgnoreColumns": "忽略字段",
   "mysqlHostTooltip": "数据库主机地址，网页不保证数据库账号，密码安全性，建议用 localhost 连接生成代码，不建议用于生产环境",
   "mysqlStyleTooltip": "生成的文件格式化符号，默认为 gozero，更多格式化符号可参考：https://go-zero.dev/docs/tutorials/cli/style",
-  "mysqlStrictTooltip": "严格模式下会根据 unsign 生成带符号的数据类型"
+  "mysqlStrictTooltip": "严格模式下会根据 unsign 生成带符号的数据类型",
+  "mysqlModalTitle": "数据库连接提示",
+  "mysqlModalCheckTitle": "不再提示",
+  "mysqlModalOkTitle": "知道了",
+  "mysqlModalContent": "网页不保证数据库账号，密码安全性，请谨慎使用生产环境账号进行代码生成，建议按照如下流程进行代码生成：",
+  "mysqlModalContent1": "1. 本地数据库创建表信息",
+  "mysqlModalContent2": "2. 连接本地数据库进行代码生成"
 }

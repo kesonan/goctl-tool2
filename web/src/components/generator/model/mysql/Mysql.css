@@ -22,11 +22,10 @@
 }
 
 .mysql-form-container {
-    flex: 1;
     height: 100%;
     overflow: scroll;
     background: white;
-    min-width: 500px;
+    width: 500px;
 }
 
 .mysql-editor-container {

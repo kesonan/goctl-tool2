@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Flex, Typography } from "antd";
-import "./Mysql.css";
+import "./mysql/Mysql.css";
 import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;

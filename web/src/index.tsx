@@ -8,7 +8,7 @@ import Welcome from "./components/welcome/Welcome";
 import NotFound from "./components/notfound/NotFound";
 import Builder from "./components/api/Builder";
 import Model from "./components/generator/model/Model";
-import Mysql from "./components/generator/model/Mysql";
+import Mysql from "./components/generator/model/mysql/Mysql";
 import Postgresql from "./components/generator/model/Postgresql";
 
 const router = createBrowserRouter(

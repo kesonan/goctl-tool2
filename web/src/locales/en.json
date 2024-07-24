@@ -111,5 +111,12 @@
   "mysqlIgnoreColumns": "IgnoreColumns",
   "mysqlHostTooltip": "Database host address. The web page does not guarantee the security of database accounts and passwords. It is recommended to use localhost to connect to generate code. It is not recommended to be used in production environments.",
   "mysqlStyleTooltip": "Generated file formatting symbols, the default is gozero, more formatting symbols can be referred to：https://go-zero.dev/en/docs/tutorials/cli/style",
-  "mysqlStrictTooltip": "In strict mode, signed data types are generated based on unsign"
+  "mysqlStrictTooltip": "In strict mode, signed data types are generated based on unsign",
+  "mysqlModalTitle": "Database connection tips",
+  "mysqlModalCheckTitle": "Do not show again",
+  "mysqlModalOkTitle": "Got it",
+  "mysqlModalContent": "The webpage does not guarantee the security of the database account and password. Please use the production environment account for code generation with caution. It is recommended to follow the following process for code generation:",
+  "mysqlModalContent1": "1. Local database creation table information",
+  "mysqlModalContent2": "2. Connect to a local database for code generation",
+  "formSelectPrefix": "Please select "
 }

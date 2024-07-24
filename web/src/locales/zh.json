@@ -117,5 +117,6 @@
   "mysqlModalOkTitle": "知道了",
   "mysqlModalContent": "网页不保证数据库账号，密码安全性，请谨慎使用生产环境账号进行代码生成，建议按照如下流程进行代码生成：",
   "mysqlModalContent1": "1. 本地数据库创建表信息",
-  "mysqlModalContent2": "2. 连接本地数据库进行代码生成"
+  "mysqlModalContent2": "2. 连接本地数据库进行代码生成",
+  "formSelectPrefix": "请选择"
 }

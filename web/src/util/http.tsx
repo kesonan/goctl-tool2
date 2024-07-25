@@ -4,8 +4,8 @@ const Paths = {
   ParseBodyPath: "/api/requestbodyparse",
   APIBuildPath: "/api/generate",
   RenderTagPath: "/api/rendertag",
-  DBConnectPath: "/api/model/connect",
-  TablePath: "/api/model/tables",
+  DBConnectPath: "/api/model-connect",
+  TablePath: "/api/model-tables",
 };
 
 export type ParseBodyResult = {
@@ -128,7 +128,7 @@ export const Http = {
     catchError: (err: string) => void,
   ) => {
     postJSON<TablesResult>(
-      Paths.DBConnectPath,
+      Paths.TablePath,
       param,
       (data) => {
         callback(data.tables);

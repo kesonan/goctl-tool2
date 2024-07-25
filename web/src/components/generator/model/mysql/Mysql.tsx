@@ -28,6 +28,11 @@ import { Http } from "../../../../util/http";
 
 const { Title } = Typography;
 
+export type Option = {
+  label: string;
+  value: string;
+};
+
 const Mysql: React.FC = () => {
   const { t } = useTranslation();
   const [api, contextHolder] = notification.useNotification();
@@ -35,18 +40,16 @@ const Mysql: React.FC = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalCheck, setModalCheck] = useState(false);
   const [hideModal, setHideModal] = useState(false);
-  const [loading, setLoading] = useState(false);
   const [validDSN, setValidDSN] = useState(false);
   const [remember, setRemember] = useState(true);
-  const [mysqlConnectInfo, setMysqlConnectInfo] = useState({});
-  const [schemas, setSchemas] = useState([{}]);
-  const [tables, setTables] = useState([{}]);
-  const [initialValues, setInitialValues] = useState([
-    {
-      host: "localhost",
-      port: 3306,
-    },
-  ]);
+  const [mysqlConnectInfo, setMysqlConnectInfo] = useState({
+    host: "localhost",
+    port: 3306,
+    username: "",
+    password: "",
+  });
+  const [schemas, setSchemas] = useState<Option[]>();
+  const [tables, setTables] = useState<Option[]>();
   const [connectionForm] = Form.useForm();
   const [generateForm] = Form.useForm();
   const onChange: CheckboxProps["onChange"] = (e) => {
@@ -62,14 +65,17 @@ const Mysql: React.FC = () => {
     if (val) {
       const mysqlConnectData = JSON.parse(val);
       if (mysqlConnectData) {
-        setInitialValues(mysqlConnectData);
+        connectionForm.setFieldsValue(mysqlConnectData);
         Http.ConnectDB(
           mysqlConnectData,
           (schemas: string[]) => {
             setMysqlConnectInfo(mysqlConnectData);
             setValidDSN(true);
-            let schemaOptions = [];
-            for (let i = 0; schemas.length; i++) {
+            if (!schemas) {
+              return;
+            }
+            let schemaOptions: Option[] = [];
+            for (let i = 0; i < schemas.length; i++) {
               schemaOptions.push({
                 label: schemas[i],
                 value: schemas[i],
@@ -100,33 +106,6 @@ const Mysql: React.FC = () => {
           .then((values: any) => {
             console.log("connectionForm:", connectionForm.getFieldsValue());
             console.log("generateForm:", generateForm.getFieldsValue());
-            switch (name) {
-              case "refresh":
-                Http.ConnectDB(
-                  mysqlConnectInfo,
-                  (schemas: string[]) => {
-                    setValidDSN(true);
-                    let schemaOptions = [];
-                    for (let i = 0; schemas.length; i++) {
-                      schemaOptions.push({
-                        label: schemas[i],
-                        value: schemas[i],
-                      });
-                    }
-                    setSchemas(schemaOptions);
-                    setLoading(true);
-                  },
-                  (err) => {
-                    api.error({
-                      message: t("mysqlConnectError"),
-                      description: err,
-                      placement: "topRight",
-                    });
-                  },
-                );
-                break;
-              default:
-            }
           })
           .catch(catchErr);
       })
@@ -184,7 +163,11 @@ const Mysql: React.FC = () => {
               <Form
                 layout="vertical"
                 form={connectionForm}
-                initialValues={initialValues}
+                initialValues={{
+                  host: "localhost",
+                  port: 3306,
+                  remember: remember,
+                }}
                 onFinish={(values) => {
                   Http.ConnectDB(
                     values,
@@ -196,8 +179,11 @@ const Mysql: React.FC = () => {
                           JSON.stringify(values),
                         );
                       }
+                      if (!schemas) {
+                        return;
+                      }
                       let schemaOptions = [];
-                      for (let i = 0; schemas.length; i++) {
+                      for (let i = 0; i < schemas.length; i++) {
                         schemaOptions.push({
                           label: schemas[i],
                           value: schemas[i],
@@ -296,7 +282,12 @@ const Mysql: React.FC = () => {
                               localStorage.removeItem(
                                 MysqlData.rememberConnect,
                               );
-                              setMysqlConnectInfo({});
+                              setMysqlConnectInfo({
+                                host: "localhost",
+                                port: 3306,
+                                username: "",
+                                password: "",
+                              });
                               connectionForm.resetFields();
                             }}
                           >
@@ -312,8 +303,8 @@ const Mysql: React.FC = () => {
                           {t("mysqlConnection")}
                         </Button>
                       </Form.Item>
-                      <Form.Item noStyle style={{ flex: 1 }}>
-                        <Checkbox onChange={onChange}>
+                      <Form.Item noStyle style={{ flex: 1 }} name={"remember"}>
+                        <Checkbox onChange={onChange} checked={remember}>
                           {t("mysqlRemember")}
                         </Checkbox>
                       </Form.Item>
@@ -352,13 +343,22 @@ const Mysql: React.FC = () => {
                         allowClear
                         options={schemas}
                         onChange={(value) => {
+                          if (!value) {
+                            return;
+                          }
                           Http.GetTables(
                             {
+                              host: mysqlConnectInfo.host,
+                              port: mysqlConnectInfo.port,
+                              username: mysqlConnectInfo.username,
+                              password: mysqlConnectInfo.password,
                               schema: value,
                             },
                             (data) => {
-                              setLoading(true);
-                              let list = [{}];
+                              if (!data) {
+                                return;
+                              }
+                              let list: Option[] = [];
                               for (let i = 0; i < data.length; i++) {
                                 list.push({
                                   label: data[i],
@@ -368,7 +368,6 @@ const Mysql: React.FC = () => {
                               setTables(list);
                             },
                             (err) => {
-                              setLoading(true);
                               api.error({
                                 message: t("mysqlGetTablesError"),
                                 description: err,
@@ -437,15 +436,6 @@ const Mysql: React.FC = () => {
                   </Flex>
 
                   <Flex justify={"flex-end"} gap={8}>
-                    <Button
-                      loading={loading}
-                      type={"dashed"}
-                      onClick={() => {
-                        onSubmit("refresh");
-                      }}
-                    >
-                      {t("mysqlBtnRefresh")}
-                    </Button>
                     <Form.Item noStyle style={{ flex: 1 }}>
                       <Button
                         type={"primary"}

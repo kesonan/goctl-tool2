@@ -13,11 +13,11 @@ const items: MenuItem[] = [
     key: "/generator/model/mysql",
     icon: <ConverterIcon type={"icon-mysql"} />,
   },
-  {
-    label: "PostgreSQL",
-    key: "/generator/model/postgresql",
-    icon: <ConverterIcon type={"icon-postgresql"} />,
-  },
+  // {
+  //   label: "PostgreSQL",
+  //   key: "/generator/model/postgresql",
+  //   icon: <ConverterIcon type={"icon-postgresql"} />,
+  // },
 ];
 
 const Model: React.FC = () => {

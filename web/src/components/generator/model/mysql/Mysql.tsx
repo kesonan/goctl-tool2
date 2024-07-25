@@ -10,34 +10,82 @@ import {
   InputNumber,
   Modal,
   Select,
+  notification,
   Typography,
 } from "antd";
 import "./Mysql.css";
 import { useTranslation } from "react-i18next";
 import CodeMirror from "@uiw/react-codemirror";
-import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
+import {
+  EyeInvisibleOutlined,
+  EyeTwoTone,
+  PoweroffOutlined,
+} from "@ant-design/icons";
 import { MysqlData } from "./_defaultProps";
 import { RoutePanelData } from "../../../api/form/_defaultProps";
 import { FormFinishInfo } from "rc-field-form/lib/FormContext";
+import { Http } from "../../../../util/http";
 
 const { Title } = Typography;
 
 const Mysql: React.FC = () => {
   const { t } = useTranslation();
+  const [api, contextHolder] = notification.useNotification();
   const [code, setCode] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [modalCheck, setModalCheck] = useState(false);
   const [hideModal, setHideModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [validDSN, setValidDSN] = useState(false);
+  const [remember, setRemember] = useState(true);
+  const [mysqlConnectInfo, setMysqlConnectInfo] = useState({});
+  const [schemas, setSchemas] = useState([{}]);
+  const [tables, setTables] = useState([{}]);
+  const [initialValues, setInitialValues] = useState([
+    {
+      host: "localhost",
+      port: 3306,
+    },
+  ]);
   const [connectionForm] = Form.useForm();
   const [generateForm] = Form.useForm();
   const onChange: CheckboxProps["onChange"] = (e) => {
-    console.log(`checked = ${e.target.checked}`);
+    setRemember(e.target.checked);
   };
 
   useEffect(() => {
     const value = localStorage.getItem(MysqlData.hideConnectModal);
     if (value && value === "true") {
       setHideModal(true);
+    }
+    const val = localStorage.getItem(MysqlData.rememberConnect);
+    if (val) {
+      const mysqlConnectData = JSON.parse(val);
+      if (mysqlConnectData) {
+        setInitialValues(mysqlConnectData);
+        Http.ConnectDB(
+          mysqlConnectData,
+          (schemas: string[]) => {
+            setMysqlConnectInfo(mysqlConnectData);
+            setValidDSN(true);
+            let schemaOptions = [];
+            for (let i = 0; schemas.length; i++) {
+              schemaOptions.push({
+                label: schemas[i],
+                value: schemas[i],
+              });
+            }
+            setSchemas(schemaOptions);
+          },
+          (err) => {
+            api.error({
+              message: t("mysqlConnectError"),
+              description: err,
+              placement: "topRight",
+            });
+          },
+        );
+      }
     }
   }, []);
 
@@ -52,6 +100,33 @@ const Mysql: React.FC = () => {
           .then((values: any) => {
             console.log("connectionForm:", connectionForm.getFieldsValue());
             console.log("generateForm:", generateForm.getFieldsValue());
+            switch (name) {
+              case "refresh":
+                Http.ConnectDB(
+                  mysqlConnectInfo,
+                  (schemas: string[]) => {
+                    setValidDSN(true);
+                    let schemaOptions = [];
+                    for (let i = 0; schemas.length; i++) {
+                      schemaOptions.push({
+                        label: schemas[i],
+                        value: schemas[i],
+                      });
+                    }
+                    setSchemas(schemaOptions);
+                    setLoading(true);
+                  },
+                  (err) => {
+                    api.error({
+                      message: t("mysqlConnectError"),
+                      description: err,
+                      placement: "topRight",
+                    });
+                  },
+                );
+                break;
+              default:
+            }
           })
           .catch(catchErr);
       })
@@ -100,7 +175,7 @@ const Mysql: React.FC = () => {
         <p>{t("mysqlModalContent1")}</p>
         <p>{t("mysqlModalContent2")}</p>
       </Modal>
-
+      {contextHolder}
       <Flex className="mysql" gap={1} wrap>
         <div className={"mysql-form-container"}>
           <Form.Provider>
@@ -109,8 +184,35 @@ const Mysql: React.FC = () => {
               <Form
                 layout="vertical"
                 form={connectionForm}
+                initialValues={initialValues}
                 onFinish={(values) => {
-                  console.log("connectionForm2:", values);
+                  Http.ConnectDB(
+                    values,
+                    (schemas: string[]) => {
+                      setValidDSN(true);
+                      if (remember) {
+                        localStorage.setItem(
+                          MysqlData.rememberConnect,
+                          JSON.stringify(values),
+                        );
+                      }
+                      let schemaOptions = [];
+                      for (let i = 0; schemas.length; i++) {
+                        schemaOptions.push({
+                          label: schemas[i],
+                          value: schemas[i],
+                        });
+                      }
+                      setSchemas(schemaOptions);
+                    },
+                    (err) => {
+                      api.error({
+                        message: t("mysqlConnectError"),
+                        description: err,
+                        placement: "topRight",
+                      });
+                    },
+                  );
                 }}
               >
                 <div className={"mysql-connection-panel"}>
@@ -128,6 +230,7 @@ const Mysql: React.FC = () => {
                       ]}
                     >
                       <Input
+                        disabled={validDSN}
                         allowClear
                         placeholder={`${t("formInputPrefix")}${t("mysqlHost")}`}
                       />
@@ -144,6 +247,7 @@ const Mysql: React.FC = () => {
                       ]}
                     >
                       <InputNumber
+                        disabled={validDSN}
                         style={{ width: "100%" }}
                         placeholder={`${t("formInputPrefix")}${t("mysqlPort")}`}
                         min={0}
@@ -158,14 +262,9 @@ const Mysql: React.FC = () => {
                       label={t("mysqlUsername")}
                       name={"username"}
                       style={{ flex: 1 }}
-                      rules={[
-                        {
-                          required: true,
-                          message: `${t("formInputPrefix")}${t("mysqlUsername")}`,
-                        },
-                      ]}
                     >
                       <Input
+                        disabled={validDSN}
                         allowClear
                         placeholder={`${t("formInputPrefix")}${t("mysqlUsername")}`}
                       />
@@ -174,14 +273,9 @@ const Mysql: React.FC = () => {
                       label={t("mysqlPassword")}
                       name={"password"}
                       style={{ flex: 1 }}
-                      rules={[
-                        {
-                          required: true,
-                          message: `${t("formInputPrefix")}${t("mysqlPassword")}`,
-                        },
-                      ]}
                     >
                       <Input.Password
+                        disabled={validDSN}
                         allowClear
                         placeholder={`${t("formInputPrefix")}${t("mysqlPassword")}`}
                         iconRender={(visible) =>
@@ -190,18 +284,41 @@ const Mysql: React.FC = () => {
                       />
                     </Form.Item>
                   </Flex>
-                  <Flex justify={"space-between"} align={"center"} flex={1}>
-                    <Form.Item noStyle style={{ flex: 1 }}>
-                      <Button type={"primary"} htmlType={"submit"}>
-                        {t("mysqlConnection")}
-                      </Button>
-                    </Form.Item>
-                    <Form.Item noStyle style={{ flex: 1 }}>
-                      <Checkbox onChange={onChange}>
-                        {t("mysqlRemember")}
-                      </Checkbox>
-                    </Form.Item>
-                  </Flex>
+                  {validDSN ? (
+                    <>
+                      <Flex justify={"flex-end"} align={"center"} flex={1}>
+                        <Form.Item noStyle style={{ flex: 1 }}>
+                          <Button
+                            type={"primary"}
+                            danger
+                            onClick={() => {
+                              setValidDSN(false);
+                              localStorage.removeItem(
+                                MysqlData.rememberConnect,
+                              );
+                              setMysqlConnectInfo({});
+                              connectionForm.resetFields();
+                            }}
+                          >
+                            {t("mysqlBtnReset")}
+                          </Button>
+                        </Form.Item>
+                      </Flex>
+                    </>
+                  ) : (
+                    <Flex justify={"space-between"} align={"center"} flex={1}>
+                      <Form.Item noStyle style={{ flex: 1 }}>
+                        <Button type={"primary"} htmlType={"submit"}>
+                          {t("mysqlConnection")}
+                        </Button>
+                      </Form.Item>
+                      <Form.Item noStyle style={{ flex: 1 }}>
+                        <Checkbox onChange={onChange}>
+                          {t("mysqlRemember")}
+                        </Checkbox>
+                      </Form.Item>
+                    </Flex>
+                  )}
                 </div>
               </Form>
               <Divider orientation="left">{t("mysqlGenerateTitle")}</Divider>
@@ -224,27 +341,56 @@ const Mysql: React.FC = () => {
                       label={t("mysqlSchema")}
                       style={{ flex: 1 }}
                       name={"schema"}
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     message: `${t("formSelectPrefix")}${t("mysqlSchema")}`,
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${t("formSelectPrefix")}${t("mysqlSchema")}`,
+                        },
+                      ]}
                     >
-                      <Select allowClear />
+                      <Select
+                        allowClear
+                        options={schemas}
+                        onChange={(value) => {
+                          Http.GetTables(
+                            {
+                              schema: value,
+                            },
+                            (data) => {
+                              setLoading(true);
+                              let list = [{}];
+                              for (let i = 0; i < data.length; i++) {
+                                list.push({
+                                  label: data[i],
+                                  value: data[i],
+                                });
+                              }
+                              setTables(list);
+                            },
+                            (err) => {
+                              setLoading(true);
+                              api.error({
+                                message: t("mysqlGetTablesError"),
+                                description: err,
+                                placement: "topRight",
+                              });
+                            },
+                          );
+                        }}
+                      />
                     </Form.Item>
                     <Form.Item
                       label={t("mysqlTable")}
                       style={{ flex: 1 }}
                       name={"table"}
-                      // rules={[
-                      //   {
-                      //     required: true,
-                      //     message: `${t("formSelectPrefix")}${t("mysqlTable")}`,
-                      //   },
-                      // ]}
+                      rules={[
+                        {
+                          required: true,
+                          message: `${t("formSelectPrefix")}${t("mysqlTable")}`,
+                        },
+                      ]}
                     >
-                      <Select mode="multiple" allowClear />
+                      <Select mode="multiple" allowClear options={tables} />
                     </Form.Item>
                   </Flex>
                   <Flex wrap gap={8}>
@@ -290,12 +436,21 @@ const Mysql: React.FC = () => {
                     </Form.Item>
                   </Flex>
 
-                  <Flex justify={"flex-end"}>
+                  <Flex justify={"flex-end"} gap={8}>
+                    <Button
+                      loading={loading}
+                      type={"dashed"}
+                      onClick={() => {
+                        onSubmit("refresh");
+                      }}
+                    >
+                      {t("mysqlBtnRefresh")}
+                    </Button>
                     <Form.Item noStyle style={{ flex: 1 }}>
                       <Button
                         type={"primary"}
                         onClick={() => {
-                          onSubmit("generateForm");
+                          onSubmit("submit");
                         }}
                       >
                         {t("mysqlGenerate")}

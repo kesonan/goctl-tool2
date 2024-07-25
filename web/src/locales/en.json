@@ -118,5 +118,9 @@
   "mysqlModalContent": "The webpage does not guarantee the security of the database account and password. Please use the production environment account for code generation with caution. It is recommended to follow the following process for code generation:",
   "mysqlModalContent1": "1. Local database creation table information",
   "mysqlModalContent2": "2. Connect to a local database for code generation",
-  "formSelectPrefix": "Please select "
+  "formSelectPrefix": "Please select ",
+  "mysqlBtnRefresh": "Refresh",
+  "mysqlConnectError": "Connect error",
+  "mysqlGetTablesError": "Tables error",
+  "mysqlBtnReset": "Reset"
 }

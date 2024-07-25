@@ -4,6 +4,8 @@ const Paths = {
   ParseBodyPath: "/api/requestbodyparse",
   APIBuildPath: "/api/generate",
   RenderTagPath: "/api/rendertag",
+  DBConnectPath: "/api/model/connect",
+  TablePath: "/api/model/tables",
 };
 
 export type ParseBodyResult = {
@@ -16,6 +18,14 @@ export type APIBuildResult = {
 
 export type RenderTagResult = {
   tag: string;
+};
+
+export type ConnectResult = {
+  schemas: string[];
+};
+
+export type TablesResult = {
+  tables: string[];
 };
 
 export type ParseBodyForm = {
@@ -94,6 +104,34 @@ export const Http = {
       param,
       (data) => {
         callback(data.tag);
+      },
+      catchError,
+    );
+  },
+  ConnectDB: (
+    param: any,
+    callback: (data: string[]) => void,
+    catchError: (err: string) => void,
+  ) => {
+    postJSON<ConnectResult>(
+      Paths.DBConnectPath,
+      param,
+      (data) => {
+        callback(data.schemas);
+      },
+      catchError,
+    );
+  },
+  GetTables: (
+    param: any,
+    callback: (data: string[]) => void,
+    catchError: (err: string) => void,
+  ) => {
+    postJSON<TablesResult>(
+      Paths.DBConnectPath,
+      param,
+      (data) => {
+        callback(data.tables);
       },
       catchError,
     );

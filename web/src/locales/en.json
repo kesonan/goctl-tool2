@@ -103,7 +103,8 @@
   "mysqlConnection": "Connect",
   "mysqlConnectionTitle": "Connection info",
   "mysqlGenerateTitle": "Generation options",
-  "mysqlGenerate": "Generate",
+  "mysqlGenerate": "Code Preview",
+  "mysqlDownload": "Download",
   "mysqlRemember": "Remember",
   "mysqlCache": "UseCache",
   "mysqlStrict": "StrictMode",
@@ -122,5 +123,8 @@
   "mysqlBtnRefresh": "Refresh",
   "mysqlConnectError": "Connect error",
   "mysqlGetTablesError": "Tables error",
-  "mysqlBtnReset": "Reset"
+  "mysqlGenError": "Mysql generation error",
+  "mysqlBtnReset": "Reset",
+  "mysqlDownloadSuccess": "Download success",
+  "mysqlDownloadError": "Download failed"
 }

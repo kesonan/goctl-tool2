@@ -25,12 +25,11 @@
     height: 100%;
     overflow: scroll;
     background: white;
-    width: 500px;
+    width: 400px;
 }
 
 .mysql-editor-container {
-    flex: 1;
-    height: 100%;
+    font-size: 12px;
 }
 
 .mysql-form-item {

@@ -30,7 +30,7 @@ type (
 	GenerateRequest struct {
 		GetTablesRequest
 		Tables        []string `json:"tables"`
-		Style         string   `json:"style,optional"`
+		Style         string   `json:"style,optional,default=gozero"`
 		Cache         bool     `json:"cache,optional"`
 		Strict        bool     `json:"strict,optional"`
 		IgnoreColumns string   `json:"ignoreColumns,,optional"`

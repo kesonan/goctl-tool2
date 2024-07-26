@@ -103,7 +103,8 @@
   "mysqlConnection": "连接数据库",
   "mysqlConnectionTitle": "数据库连接信息",
   "mysqlGenerateTitle": "代码生成选项",
-  "mysqlGenerate": "生成代码",
+  "mysqlGenerate": "生成代码预览",
+  "mysqlDownload": "下载代码",
   "mysqlRemember": "记住账号",
   "mysqlCache": "是否带缓存",
   "mysqlStrict": "是否严格模式",
@@ -122,5 +123,8 @@
   "mysqlBtnRefresh": "刷新数据表",
   "mysqlConnectError": "数据库连接失败",
   "mysqlGetTablesError": "数据表获取失败",
-  "mysqlBtnReset": "重置"
+  "mysqlGenError": "代码生成失败",
+  "mysqlBtnReset": "重置",
+  "mysqlDownloadSuccess": "下载成功",
+  "mysqlDownloadError": "下载失败"
 }

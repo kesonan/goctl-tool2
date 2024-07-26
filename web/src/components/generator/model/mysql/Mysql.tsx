@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { GetProps, Tooltip, TreeDataNode } from "antd";
 import {
   Button,
   Checkbox,
@@ -9,24 +10,23 @@ import {
   Input,
   InputNumber,
   Modal,
-  Select,
   notification,
+  Select,
+  Tree,
   Typography,
 } from "antd";
 import "./Mysql.css";
 import { useTranslation } from "react-i18next";
-import CodeMirror from "@uiw/react-codemirror";
-import {
-  EyeInvisibleOutlined,
-  EyeTwoTone,
-  PoweroffOutlined,
-} from "@ant-design/icons";
+import CodeMirror, { EditorView } from "@uiw/react-codemirror";
+import { EyeInvisibleOutlined, EyeTwoTone } from "@ant-design/icons";
 import { MysqlData } from "./_defaultProps";
-import { RoutePanelData } from "../../../api/form/_defaultProps";
-import { FormFinishInfo } from "rc-field-form/lib/FormContext";
-import { Http } from "../../../../util/http";
+import { File, Http } from "../../../../util/http";
+import { githubLight } from "@uiw/codemirror-theme-github";
+import { langs } from "@uiw/codemirror-extensions-langs";
 
-const { Title } = Typography;
+const { DirectoryTree } = Tree;
+type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
+const { Text } = Typography;
 
 export type Option = {
   label: string;
@@ -36,12 +36,20 @@ export type Option = {
 const Mysql: React.FC = () => {
   const { t } = useTranslation();
   const [api, contextHolder] = notification.useNotification();
-  const [code, setCode] = useState("");
+  const [code, setCode] = useState(``);
   const [modalOpen, setModalOpen] = useState(false);
   const [modalCheck, setModalCheck] = useState(false);
   const [hideModal, setHideModal] = useState(false);
   const [validDSN, setValidDSN] = useState(false);
   const [remember, setRemember] = useState(true);
+  const [mysqlFiles, setMysqlFiles] = useState<File[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [treeData, setTreeData] = useState<TreeDataNode[]>([
+    {
+      title: "model",
+      key: "model",
+    },
+  ]);
   const [mysqlConnectInfo, setMysqlConnectInfo] = useState({
     host: "localhost",
     port: 3306,
@@ -104,12 +112,107 @@ const Mysql: React.FC = () => {
       .then((values: any) => {
         generateFormPromise
           .then((values: any) => {
-            console.log("connectionForm:", connectionForm.getFieldsValue());
-            console.log("generateForm:", generateForm.getFieldsValue());
+            const connectionFields = connectionForm.getFieldsValue();
+            const generateFields = generateForm.getFieldsValue();
+            if (name === "download") {
+              Http.MysqlDownload(
+                {
+                  host: connectionFields.host,
+                  port: mysqlConnectInfo.port,
+                  username: mysqlConnectInfo.username,
+                  password: mysqlConnectInfo.password,
+                  schema: generateFields.schema,
+                  tables: generateFields.tables,
+                  style: generateFields.style,
+                  cache: generateFields.cache,
+                  strict: generateFields.strict,
+                },
+                () => {
+                  api.success({
+                    message: t("mysqlDownloadSuccess"),
+                    placement: "topRight",
+                  });
+                },
+                (err) => {
+                  api.error({
+                    message: t("mysqlDownloadError"),
+                    description: err,
+                    placement: "topRight",
+                  });
+                },
+              );
+            } else {
+              Http.MysqlGen(
+                {
+                  host: connectionFields.host,
+                  port: mysqlConnectInfo.port,
+                  username: mysqlConnectInfo.username,
+                  password: mysqlConnectInfo.password,
+                  schema: generateFields.schema,
+                  tables: generateFields.tables,
+                  style: generateFields.style,
+                  cache: generateFields.cache,
+                  strict: generateFields.strict,
+                },
+                (data) => {
+                  if (!data) {
+                    return;
+                  }
+                  setMysqlFiles(data);
+                  let trees: TreeDataNode[] = [];
+                  for (let i = 0; i < data.length; i++) {
+                    const item = data[i];
+                    trees.push({
+                      title: (
+                        <Tooltip title={item.name}>
+                          <Text ellipsis style={{ width: 150 }}>
+                            {item.name}
+                          </Text>
+                        </Tooltip>
+                      ),
+                      key: item.name,
+                      isLeaf: true,
+                    });
+                  }
+                  setTreeData([
+                    {
+                      title: "model",
+                      key: "model",
+                      children: trees,
+                    },
+                  ]);
+                  setSelectedKeys([data[0].name]);
+                  setCode(data[0].content);
+                },
+                (err) => {
+                  api.error({
+                    message: t("mysqlGenError"),
+                    description: err,
+                    placement: "topRight",
+                  });
+                },
+              );
+            }
           })
           .catch(catchErr);
       })
       .catch(catchErr);
+  };
+
+  const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
+    if (!keys) {
+      return;
+    }
+    const key = keys[0];
+    setSelectedKeys([key as string]);
+    for (let i = 0; i < mysqlFiles.length; i++) {
+      const file = mysqlFiles[i];
+      const name = file.name;
+      if (name === key) {
+        setCode(file.content);
+        break;
+      }
+    }
   };
 
   return (
@@ -381,7 +484,7 @@ const Mysql: React.FC = () => {
                     <Form.Item
                       label={t("mysqlTable")}
                       style={{ flex: 1 }}
-                      name={"table"}
+                      name={"tables"}
                       rules={[
                         {
                           required: true,
@@ -438,6 +541,16 @@ const Mysql: React.FC = () => {
                   <Flex justify={"flex-end"} gap={8}>
                     <Form.Item noStyle style={{ flex: 1 }}>
                       <Button
+                        type={"dashed"}
+                        onClick={() => {
+                          onSubmit("download");
+                        }}
+                      >
+                        {t("mysqlDownload")}
+                      </Button>
+                    </Form.Item>
+                    <Form.Item noStyle style={{ flex: 1 }}>
+                      <Button
                         type={"primary"}
                         onClick={() => {
                           onSubmit("submit");
@@ -452,15 +565,47 @@ const Mysql: React.FC = () => {
             </Flex>
           </Form.Provider>
         </div>
-        <CodeMirror
+        <Flex
+          gap={1}
           style={{
             flex: 1,
             height: "100%",
-            background: "white",
+            background: "#f1f1f1",
             minWidth: 300,
           }}
-          // className={"mysql-editor-container"}
-        />
+        >
+          <DirectoryTree
+            showLine
+            showIcon={false}
+            defaultExpandAll
+            onSelect={onSelect}
+            treeData={treeData}
+            selectedKeys={selectedKeys}
+            style={{
+              width: 200,
+            }}
+          />
+          <CodeMirror
+            className={"mysql-editor-container"}
+            value={code}
+            extensions={[
+              langs.go(),
+              EditorView.theme({
+                "&.cm-focused": {
+                  outline: "none",
+                },
+              }),
+            ]}
+            readOnly
+            theme={githubLight}
+            style={{
+              flex: 1,
+              height: "100%",
+              background: "white",
+              overflow: "scroll",
+            }}
+          />
+        </Flex>
       </Flex>
     </>
   );

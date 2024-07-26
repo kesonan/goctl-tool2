@@ -182,6 +182,10 @@ const App: React.FC = () => {
           Select: {
             optionSelectedBg: "rgba(0, 0, 0, 0.04)",
           },
+          Tree: {
+            directoryNodeSelectedBg: "#f1f1f1",
+            directoryNodeSelectedColor: "#000000",
+          },
         },
       }}
     >

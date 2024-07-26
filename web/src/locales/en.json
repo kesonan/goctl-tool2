@@ -110,7 +110,7 @@
   "mysqlStrict": "StrictMode",
   "mysqlStyle": "Format",
   "mysqlIgnoreColumns": "IgnoreColumns",
-  "mysqlHostTooltip": "Database host address. The web page does not guarantee the security of database accounts and passwords. It is recommended to use localhost to connect to generate code. It is not recommended to be used in production environments.",
+  "mysqlHostTooltip": "Database host address. The web page does not guarantee the security of database accounts and passwords. It is recommended to use dev server to connect to generate code. It is not recommended to be used in production environments.",
   "mysqlStyleTooltip": "Generated file formatting symbols, the default is gozero, more formatting symbols can be referred to：https://go-zero.dev/en/docs/tutorials/cli/style",
   "mysqlStrictTooltip": "In strict mode, signed data types are generated based on unsign",
   "mysqlModalTitle": "Database connection tips",

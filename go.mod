@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/zeromicro/go-zero v1.6.6
-	github.com/zeromicro/goctl-tool/core v0.0.0-20240720053245-7e9400c8290e
+	github.com/zeromicro/goctl-tool/core v0.0.0-20240726111226-edf91cbaf120
 )
 
 require (
@@ -59,5 +59,3 @@ require (
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
-
-replace github.com/zeromicro/goctl-tool/core => ./core

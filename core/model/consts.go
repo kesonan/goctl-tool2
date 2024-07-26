@@ -1,3 +1,5 @@
 package model
 
-const schemaInformation = "information_schema"
+const (
+	schemaInformation = "information_schema"
+)

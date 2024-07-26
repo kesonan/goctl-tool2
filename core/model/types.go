@@ -26,6 +26,24 @@ type (
 	GetTablesResponse struct {
 		Tables []string `json:"tables"`
 	}
+
+	GenerateRequest struct {
+		GetTablesRequest
+		Tables        []string `json:"tables"`
+		Style         string   `json:"style,optional"`
+		Cache         bool     `json:"cache,optional"`
+		Strict        bool     `json:"strict,optional"`
+		IgnoreColumns string   `json:"ignoreColumns,,optional"`
+	}
+
+	File struct {
+		Name    string `json:"name"`
+		Content string `json:"content"`
+	}
+
+	GenerateResponse struct {
+		Files []*File `json:"files"`
+	}
 )
 
 func (req *ConnectRequest) formatDSN() string {

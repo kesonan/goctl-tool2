@@ -35,6 +35,10 @@ func main() {
 	http.HandleFunc("/api/generate", api.Generate)
 	http.HandleFunc("/api/rendertag", api.RenderTag)
 	http.HandleFunc("/api/requestbodyparse", api.RequestBodyParse)
+	http.HandleFunc("/api/model-connect", api.Connect)
+	http.HandleFunc("/api/model-tables", api.Tables)
+	http.HandleFunc("/api/mysql-generate", api.MysqlGen)
+	http.HandleFunc("/api/mysql-download", api.MysqlDownload)
 	if err := http.ListenAndServe(":2000", nil); err != nil {
 		log.Fatal(err)
 	}

@@ -6,7 +6,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./i18n";
 import Welcome from "./components/welcome/Welcome";
 import NotFound from "./components/notfound/NotFound";
-import API from "./components/api/API";
+import Builder from "./components/api/Builder";
+import Model from "./components/generator/model/Model";
+import Mysql from "./components/generator/model/mysql/Mysql";
+import Postgresql from "./components/generator/model/Postgresql";
 
 const router = createBrowserRouter(
   [
@@ -27,7 +30,30 @@ const router = createBrowserRouter(
           children: [
             {
               path: "builder",
-              element: <API />,
+              element: <Builder />,
+            },
+          ],
+        },
+        {
+          path: "generator",
+          children: [
+            {
+              path: "model",
+              element: <Model />,
+              children: [
+                {
+                  element: <Mysql />,
+                  index: true,
+                },
+                {
+                  path: "mysql",
+                  element: <Mysql />,
+                },
+                {
+                  path: "postgresql",
+                  element: <Postgresql />,
+                },
+              ],
             },
           ],
         },

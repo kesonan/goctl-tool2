@@ -43,6 +43,7 @@ const TagModal: React.FC<
   const initForm = {
     template: initTagText,
     name: "name",
+    type: "json",
     defaultValue: "foo",
     optional: false,
     checkEnum: true,

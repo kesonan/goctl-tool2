@@ -126,6 +126,7 @@ const Mysql: React.FC = () => {
                   style: generateFields.style,
                   cache: generateFields.cache,
                   strict: generateFields.strict,
+                  ignoreColumns: generateFields.ignoreColumns,
                 },
                 () => {
                   api.success({
@@ -153,6 +154,7 @@ const Mysql: React.FC = () => {
                   style: generateFields.style,
                   cache: generateFields.cache,
                   strict: generateFields.strict,
+                  ignoreColumns: generateFields.ignoreColumns,
                 },
                 (data) => {
                   if (!data) {
@@ -272,6 +274,9 @@ const Mysql: React.FC = () => {
                   remember: remember,
                 }}
                 onFinish={(values) => {
+                  if (!hideModal) {
+                    setModalOpen(true);
+                  }
                   Http.ConnectDB(
                     values,
                     (schemas: string[]) => {
@@ -511,6 +516,7 @@ const Mysql: React.FC = () => {
                       label={t("mysqlIgnoreColumns")}
                       style={{ flex: 1 }}
                       name={"ignoreColumns"}
+                      tooltip={t("mysqlIgnoreColumnsTooltip")}
                     >
                       <Input
                         allowClear

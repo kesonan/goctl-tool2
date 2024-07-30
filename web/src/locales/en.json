@@ -127,5 +127,7 @@
   "mysqlGenError": "Mysql generation error",
   "mysqlBtnReset": "Reset",
   "mysqlDownloadSuccess": "Download success",
-  "mysqlDownloadError": "Download failed"
+  "mysqlDownloadError": "Download failed",
+  "mysqlTabDatasource": "From datasource",
+  "mysqlTabDDL": "From sql"
 }

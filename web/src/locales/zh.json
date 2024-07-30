@@ -127,5 +127,7 @@
   "mysqlGenError": "代码生成失败",
   "mysqlBtnReset": "重置",
   "mysqlDownloadSuccess": "下载成功",
-  "mysqlDownloadError": "下载失败"
+  "mysqlDownloadError": "下载失败",
+  "mysqlTabDatasource": "从远程数据库生成",
+  "mysqlTabDDL": "从 sql 生成"
 }
